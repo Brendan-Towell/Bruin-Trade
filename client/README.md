@@ -13,11 +13,18 @@ npm start
 to start the web app. This should include both buttons, and print
 responses to the webpage when each is clicked.
 
+# Instructions for use with Nodemon (reccomended)
 
+In the client foler, use cmd:
 
+npm run watch
 
+In a seperate command window, also in the client folder, use cmd
 
+npm start
 
+Using nodemon saves the user from having to manually kill the server and relaunch it each time a change is made.
+Nodemon will restart the server automatically every time any .js file is saved.
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
