@@ -11,3 +11,13 @@ app.get('/getdata1', (req, res, next) => {
 app.get('/getdata2', (req, res, next) => {
   res.send("GOOD NIGHT FROM SERVER")
 })
+app.get('/loginattempt', (req, res, next) => {
+  let uname = req.query.uname;
+  let pwd = req.query.pwd;
+  if(uname == "username" && pwd == "password"){
+    res.send("VALID CREDENTIALS");
+  }
+  else{
+    res.send("INVALID CREDENTIALS");
+  }
+})
