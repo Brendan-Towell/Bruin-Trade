@@ -13,11 +13,6 @@ npm start
 to start the web app. This should include both buttons, and print
 responses to the webpage when each is clicked.
 
-
-
-
-
-
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

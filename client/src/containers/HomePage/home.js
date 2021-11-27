@@ -5,6 +5,7 @@ import Bruin from "../../images/bruin.png";
 import { BrandLogo } from "../../components/logo";
 import { Marginer } from "../../components/marginer";
 import { Button } from "../../components/button";
+import { Link } from "react-router-dom"
 
 const HomePageContainer = styled.div`
     width: 100%;
@@ -55,7 +56,6 @@ const SloganText = styled.h3`
 
 export function Home(props) {
     const { children } = props;
-
     return (
     <HomePageContainer>
         <BackgroundFilter>
@@ -66,7 +66,9 @@ export function Home(props) {
                 <SloganText>Personalized finance for</SloganText>
                 <SloganText>UCLA students</SloganText> 
                 <Marginer direction="vertical" margin={15} />
-                <Button>Join Now</Button>
+                <Link to="/signup">
+                    <Button>Join Now</Button>
+                </Link>
             </LogoContainer>
             <StandoutImage>
                 <img src={Bruin} alt="Bruins" />

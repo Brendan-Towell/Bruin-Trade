@@ -1,14 +1,14 @@
 import React from "react";
 import { PageContainer } from "../../components/pageContainer";
-import { Home } from "./home";
+import { Signup } from "./signup";
 import { Navbar } from "../../components/navbar";
 
-export function HomePage(props) {
+export function SignupPage(props) {
     return (
     <PageContainer>
-        <Home>
+        <Signup>
             <Navbar useTransparent/>
-        </Home>
+        </Signup>
     </PageContainer>
     );
 }

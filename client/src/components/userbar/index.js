@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { Button } from "../button";
 import { BrandLogo } from "../logo";
 import { Marginer } from "../marginer";
 import { Link } from "react-router-dom"
@@ -12,7 +11,7 @@ const NavBarContainer = styled.div`
     align-items: center;
     justify-content: space-between;
 
-    background-color: ${({ useTransparent }) => useTransparent ? "transparent" : "rgba(8,125,195,255)"};
+    background-color: rgba(8,125,195,255);
 `;
 
 const AccessibilityContainer = styled.div`
@@ -40,23 +39,23 @@ const Seperator = styled.div`
     background-color: #fff;
 `;
 
-export function Navbar(props) {
+export function Userbar(props) {
     const { useTransparent } = props;
     
     return (
     <NavBarContainer useTransparent={useTransparent}>
-        <Link to="/">
+        <Link to="/user">
             <BrandLogo width={10} height={2.5}/>
         </Link>
         <AccessibilityContainer>
-            <Link to="/signup">
-                <Button size={12} width={75} height={25}>Sign Up</Button>
+        <   Link to="/" style={{ textDecoration: 'none' }} >
+                <AnchorLink>Settings</AnchorLink>
             </Link>
             <Marginer direction="horizontal" margin={10} />
             <Seperator />
             <Marginer direction="horizontal" margin={10} />
-            <Link to="/login" style={{ textDecoration: 'none' }} >
-                <AnchorLink>Login</AnchorLink>
+            <Link to="/" style={{ textDecoration: 'none' }} >
+                <AnchorLink>Logout</AnchorLink>
             </Link>
             <Marginer direction="horizontal" margin={14} />
         </AccessibilityContainer>
