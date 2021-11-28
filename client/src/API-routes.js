@@ -1,3 +1,6 @@
+// FILE SHOULD CONTAIN URL ENDPOINTS FOR USERS TO INTERACT W/ APP
+
+
 //Goes in index.js
 
 //API Call Formatting 
