@@ -4,6 +4,8 @@ import { HomePage } from './containers/homePage/index';
 import { LoginPage } from './containers/loginPage/index';
 import { SignupPage} from './containers/signupPage/index';
 import { UserPage } from './containers/userPage/index';
+import { ErrorPage } from './containers/errorPage/index';
+import { TransferPage } from './containers/transferPage/index'
 
 function App() {
   return (        
@@ -13,7 +15,9 @@ function App() {
           <Route path="/" exact element={<HomePage/>}/>
           <Route path="/login" exact element={<LoginPage/>}/>
           <Route path="/signup" exact element={<SignupPage/>}/>
-          <Route path="/user" exact element={<UserPage/>}/>
+          <Route path="/home" exact element={<UserPage/>}/>
+          <Route path="/transfer" exact element={<TransferPage/>}/>
+          <Route path="*" exact element={<ErrorPage/>} />
         </Routes>
       </Router>
     </div>

@@ -44,11 +44,15 @@ export function Userbar(props) {
     
     return (
     <NavBarContainer useTransparent={useTransparent}>
-        <Link to="/user">
+        <Link to="/home">
             <BrandLogo width={10} height={2.5}/>
         </Link>
         <AccessibilityContainer>
-        <   Link to="/" style={{ textDecoration: 'none' }} >
+            <Link to="/transfer" style={{ textDecoration: 'none' }} >
+                <AnchorLink>Transfer</AnchorLink>
+            </Link>
+            <Marginer direction="horizontal" margin={14} />
+            <Link to="/" style={{ textDecoration: 'none' }} >
                 <AnchorLink>Settings</AnchorLink>
             </Link>
             <Marginer direction="horizontal" margin={10} />

@@ -11,7 +11,7 @@ export function User(props) {
     return (
         <UserPageContainer>
             {children} 
-            <h1>Hello User</h1>
+            <h1>Account Dashboard</h1>
         </UserPageContainer>
     );
 }
