@@ -11,7 +11,7 @@ const db = mysql.createConnection({
     host      : 'localHost',
     user      : 'root',
     password  : 'password',
-    database  : 'user_login_credentials'   //Database name
+    database  : 'account_info'   //Database name
 });
 
 db.connect((err) => {
@@ -19,10 +19,13 @@ db.connect((err) => {
   console.log('Database connected...')
 });
 
+// Name of table for user login credentials in database
+const user_login_table = 'user_login_info';
+
 //Create entry for user in table
 app.get('/insertuser', (req, res) => {
-  let user = {username:'TestUser', password_hash:'TestPassword'};
-  let sql = 'INSERT INTO user_login_info SET ?';
+  let user = {fullname:'Dave Mingchang', email:'TestUser@me.com', password_hash:'TestPassword'};
+  let sql = `INSERT INTO ${user_login_table} SET ?`;
   let query = db.query(sql, user, (err, result) => {
       if (err) throw err;
       console.log(result)
@@ -30,10 +33,11 @@ app.get('/insertuser', (req, res) => {
     });
 });
 
+
 //Change username for a given user
 app.get('/updateUsername/:id', (req, res) => {
   let newUsername = 'New Username';
-  let sql = `UPDATE user_login_info SET username = '${newUsername}' WHERE id = ${req.params.id}`;
+  let sql = `UPDATE ${user_login_table} SET username = '${newUsername}' WHERE id = ${req.params.id}`;
   let query = db.query(sql, (err, result) => {
       if(err) throw err;
       console.log(result);
@@ -41,9 +45,11 @@ app.get('/updateUsername/:id', (req, res) => {
     });
 });
 
+
 //Delete user from table
-app.get('/deleteUser/:username', (req, res) => {
-  let sql = `DELETE FROM user_login_info WHERE username = '${req.params.username}'`;
+app.get('/deleteUser', (req, res) => {
+  let email = req.query.email
+  let sql = `DELETE FROM ${user_login_table} WHERE email = '${email}'`;
   let query = db.query(sql, (err, result) => {
       if(err) throw err;
       console.log(result);
@@ -72,7 +78,7 @@ app.get('/loginattempt', (req, res, next) => {
   let pwd = req.query.pwd;
   
   // Check for username in user database
-  let sql = `SELECT * FROM user_login_info WHERE username = '${uname}'`;
+  let sql = `SELECT * FROM '${user_login_table}' WHERE username = '${uname}'`;
   let query = db.query(sql, (err, result) => {
       if(err) throw err;    //Throw error if received from query
 

@@ -14,8 +14,13 @@ export const insertuser = async () => {
 //Removes user from user_login_info table
   
 export const deleteuser = async () => {
-    let username = "TestUser";
-    const response = await axios.get(`http://localhost:8080/deleteUser/${username}`)
+    //let email = "TestUser";
+    //const response = await axios.get(`http://localhost:8080/deleteUser/${email}`,{
+    const response = await axios.get('http://localhost:8080/deleteUser',{
+      params: {
+        email: 'TestUser@me.com'
+      }
+    })
     console.log("User Deleted");
   };
 
