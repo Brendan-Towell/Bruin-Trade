@@ -25,6 +25,7 @@ npm start
 
 Using nodemon saves the user from having to manually kill the server and relaunch it each time a change is made.
 Nodemon will restart the server automatically every time any .js file is saved.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
