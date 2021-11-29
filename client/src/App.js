@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import axios from 'axios'
 import logo from './logo.svg';
 import './App.css';
-//import connect from './connect.js'
+import {insertuser, deleteuser} from './connect.js'
 
 class Login extends React.Component {
   constructor(props) {
@@ -35,6 +35,7 @@ class Login extends React.Component {
   }
 
   render() {
+    
     // NOTE: FOR FINAL USE, CHANGE INPUT TYPE OF PASSWORD FIELD TO "password"
     // It is set to text to prevent chrome from giving security popups
     return (
@@ -65,24 +66,6 @@ setMessage(response.data);
 setMessage(response.data);
     console.log("button 2");
   }
-
-  
-  //Inserts user in to user_login_info table
-  const insertuser = async () => {
-    const response = await axios.get('http://localhost:8080/insertuser')
-setMessage("User Created");
-    console.log("User Created");
-  } 
-
-  //Removes user from user_login_info table
-  const deleteuser = async () => {
-    let id = 4;
-    const response = await axios.get(`http://localhost:8080/deleteUser/${id}`)
-setMessage("User Deleted");
-    console.log("User Deleted");
-  } 
-
-
 
 
   return(
