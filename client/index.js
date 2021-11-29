@@ -71,7 +71,6 @@ app.get('/getdata2', (req, res, next) => {
   res.send("GOOD NIGHT FROM SERVER")
 })
 
-
 // Server processing login attempt from client
 app.get('/loginattempt', (req, res, next) => {
   let uname = req.query.uname;
@@ -100,8 +99,5 @@ app.get('/loginattempt', (req, res, next) => {
       return;
     });
 
-  
-
-
-
 })
+
