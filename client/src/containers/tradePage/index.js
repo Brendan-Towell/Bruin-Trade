@@ -1,7 +1,7 @@
 import React from "react";
 import { PageContainer } from "../../components/pageContainer";
-import { Trade } from "./trade";
 import { Userbar } from "../../components/userbar";
+import { Trade } from "./trade";
 
 export function TradePage(props) {
     return (

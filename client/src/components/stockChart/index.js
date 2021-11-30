@@ -7,7 +7,8 @@ class StockChart extends React.Component {
         super(props);
         this.state = {
             stockChartXValues: [],
-            stockChartYValues: []
+            stockChartYValues: [],
+            stockSymbol: props.stockSymbol
         }
     }
 
@@ -18,8 +19,7 @@ class StockChart extends React.Component {
     fetchStock() {
         const pointerToThis = this;
         const API_KEY = 'HFNY7BHRWB1UJ9IF';
-        let stockSymbol = 'AAPL'
-        let API_CALL = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${stockSymbol}&interval=5min&outputsize=compact&apikey=${API_KEY}`;
+        let API_CALL = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${this.state.stockSymbol}&interval=5min&outputsize=compact&apikey=${API_KEY}`;
         let stockChartXValuesFunction = [];
         let stockChartYValuesFunction = [];
 
@@ -36,7 +36,6 @@ class StockChart extends React.Component {
                         stockChartYValuesFunction.push(data['Time Series (Daily)']
                         [key]['1. open']);
                     }
-                    console.log(stockChartXValuesFunction)
                     pointerToThis.setState({
                         stockChartXValues: stockChartXValuesFunction,
                         stockChartYValues: stockChartYValuesFunction
@@ -58,7 +57,7 @@ class StockChart extends React.Component {
                             marker: {color: blue},
                         }
                     ]}
-        layout={ {width: 800, height: 500, title: `Symbol: AAPL` } }/>
+        layout={ {width: 800, height: 480, title: `Symbol: ${this.state.stockSymbol}` } }/>
             </div>
         )
     }
