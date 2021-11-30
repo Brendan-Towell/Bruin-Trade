@@ -25,3 +25,11 @@ export const deleteuser = async () => {
   };
 
   
+  export const updatebalance = async () => {
+    const response = await axios.get('http://localhost:8080/updatebalance',{
+      params: {
+        transaction_value: 10
+      }
+    })
+    console.log("Balance Updated");
+  };

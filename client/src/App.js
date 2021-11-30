@@ -5,8 +5,8 @@ import { LoginPage } from './containers/loginPage/index';
 import { SignupPage} from './containers/signupPage/index';
 import { UserPage } from './containers/userPage/index';
 import { ErrorPage } from './containers/errorPage/index';
-import { TransferPage } from './containers/transferPage/index'
-import {insertuser, deleteuser} from './connect.js'
+import { TransferPage } from './containers/transferPage/index';
+import {insertuser, deleteuser} from './endpoints/catalog.js'
 
 /*
 const handleClick1 = async () => {

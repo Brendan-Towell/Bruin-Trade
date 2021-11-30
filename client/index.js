@@ -72,11 +72,11 @@ app.get('/getdata2', (req, res, next) => {
 
 // Server processing login attempt from client
 app.get('/loginattempt', (req, res, next) => {
-  let uname = req.query.uname;
+  let email = req.query.email;
   let pwd = req.query.pwd;
   
   // Check for username in user database
-  let sql = `SELECT * FROM '${user_login_table}' WHERE username = '${uname}'`;
+  let sql = `SELECT * FROM '${user_login_table}' WHERE email = '${email}'`;
   let query = db.query(sql, (err, result) => {
       if(err) throw err;    //Throw error if received from query
 

@@ -25,7 +25,7 @@ export function SignupForm() {
         Already have an account?
         <Link to="/login" style={{ textDecoration: 'none' }} >
             <BoldLink>
-                Signin
+                Sign in
             </BoldLink>
         </Link>
         <Marginer direction="vertical" margin=".5em" />

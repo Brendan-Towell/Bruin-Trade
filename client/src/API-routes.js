@@ -1,9 +1,17 @@
 // FILE SHOULD CONTAIN URL ENDPOINTS FOR USERS TO INTERACT W/ APP
 
+// API CALL
+let symbol = "CRM";   // Change to access different stock
 
-//Goes in index.js
+const getStockPrice = async () => {
+  const api_url = `http://localhost:8080/stockprice/${symbol}`;
+  const response = await axios.get(api_url);
+  let price = response.data.latestPrice;
+  setMessage(`Latest price of ${symbol}: $${price}`);
+}
 
-//API Call Formatting 
+
+//API Response Formatting 
 //Endpoint for getting API Data
 app.get(`/stockprice/:symbol`, async (req, res) => {
     symbol = req.params.symbol;
@@ -17,16 +25,3 @@ app.get(`/stockprice/:symbol`, async (req, res) => {
         console.log("API Failure");
       });
   });
-
-
-
-//Goes in App.js
-let symbol = "CRM";   //Change to access different stock
-
-const getStockPrice = async () => {
-  const api_url = `http://localhost:8080/stockprice/${symbol}`;
-  const response = await axios.get(api_url);
-  let price = response.data.latestPrice;
-  setMessage(`Latest price of ${symbol}: $${price}`);
-
-}
