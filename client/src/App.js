@@ -74,6 +74,25 @@ class Login extends React.Component {
 
 
 function App() {
+  
+  // to be used for token authentication
+  /*if(!token){
+    return (        
+      <div className="App">
+        <Router>
+          <Routes>
+            <Route path="/" exact element={<HomePage/>}/>
+            <Route path="/login" exact element={<LoginPage/>}/>
+            <Route path="/signup" exact element={<SignupPage/>}/>
+            <Route path="*" exact element={<ErrorPage/>} />
+          </Routes>
+        </Router>
+      </div>
+      
+    );
+  }
+  */
+
   return (        
     <div className="App">
       <Router>

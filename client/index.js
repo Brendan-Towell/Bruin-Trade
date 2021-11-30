@@ -23,13 +23,23 @@ const user_login_table = 'user_login_info';
 
 //Create entry for user in table
 app.get('/insertuser', (req, res) => {
-  let user = {fullname:'Dave Mingchang', email:'TestUser@me.com', password_hash:'TestPassword'};
-  let sql = `INSERT INTO ${user_login_table} SET ?`;
-  let query = db.query(sql, user, (err, result) => {
-      if (err) throw err;
-      console.log(result)
-      res.send("User created");
-    });
+  let uname = req.query.uname;
+  let email = req.query.email;
+  let pwd1 = req.query.pwd1;
+  let pwd2 = req.query.pwd2;
+  if(pwd1 == pwd2){
+    let user = {fullname:uname, email:email, password_hash:pwd1};
+    let sql = `INSERT INTO ${user_login_table} SET ?`;
+    let query = db.query(sql, user, (err, result) => {
+        if (err) throw err;
+        console.log(result)
+        res.send("User created");
+      });
+  }
+  else{
+    console.log("passwords don't match");
+    res.send("passwords don't match");
+  }
 });
 
 
@@ -67,13 +77,14 @@ app.get('/getdata1', (req, res, next) => {
 })
 
 app.get('/getdata2', (req, res, next) => {
-  res.send("GOOD NIGHT FROM SERVER")
+  console.log("getdata2");
+  res.send("GOOD NIGHT FROM SERVER");
 })
 
 // Server processing login attempt from client
 app.get('/loginattempt', (req, res, next) => {
-  let uname = req.query.uname;
-  let pwd = req.query.pwd;
+  let uname = req.query.email;
+  let pwd = req.query.password;
   
   // Check for username in user database
   let sql = `SELECT * FROM '${user_login_table}' WHERE username = '${uname}'`;
@@ -100,3 +111,17 @@ app.get('/loginattempt', (req, res, next) => {
 
 })
 
+app.get('/testfunction',(req,res,next) =>{
+  console.log("successful testfunction call")
+  let uname = req.query.uname;
+  let email = req.query.email;
+  let pwd1 = req.query.pwd1;
+  let pwd2 = req.query.pwd2;
+  console.log("uname: " + uname);
+  console.log("email: " + email)
+  console.log("pwd1: " + pwd1);
+  console.log("pwd2: " + pwd2);
+  if(pwd1 != pwd2){
+    console.log("passwords do not match, registration invalid");
+  }
+})
