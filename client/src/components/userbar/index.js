@@ -10,7 +10,6 @@ const NavBarContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     background-color: rgba(8,125,195,255);
 `;
 
