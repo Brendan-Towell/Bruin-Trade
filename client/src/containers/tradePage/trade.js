@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Marginer } from "../../components/marginer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -9,12 +9,15 @@ import { faPlusSquare,
          faBriefcase,
          faSearch,
          faChartLine } from '@fortawesome/free-solid-svg-icons'
+import StockData from "../../components/stockData";
 
 const glasses = <FontAwesomeIcon icon={faGlasses} />
 const bag = <FontAwesomeIcon icon={faBriefcase} />
 const plus = <FontAwesomeIcon icon={faPlusSquare} />
 const search = <FontAwesomeIcon icon={faSearch} />
 const chart = <FontAwesomeIcon icon={faChartLine} />
+
+const symbol = 'AAPL'
 
 const TradePageContainer = styled.div`
     width: 100%;
@@ -111,13 +114,6 @@ const Sell = styled.div`
     display: flex;
 `;
 
-const PercentChange = styled.div`
-    width: 30%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-`;
-
 const SearchBar = styled.div`
     width: 82%;
     height: 2%;
@@ -163,20 +159,6 @@ const StockHeaderText = styled.h3`
     font-size: 30px;
 `;
 
-const PercentChangeText = styled.h5`
-    margin: 0;
-    display: flex;
-    color: red;
-`;
-
-const PercentChangeHeaderText = styled.h5`
-    margin: 0;
-    display: flex;
-    color: red;
-    font-weight: 600;
-    font-size: 25px;
-`;
-
 const HeaderText = styled.h3`
     margin: 0;
     line-height: 1.4;
@@ -193,6 +175,7 @@ const SubText = styled.h3`
 
 export function Trade(props) {
     const { children } = props;
+
     return ( 
         <TradePageContainer>
             {children}
@@ -202,21 +185,13 @@ export function Trade(props) {
                     <CurrentStock>
                         <Marginer direction="horizontal" margin={25} />
                         <StockTitle>
-                            <Marginer direction="vertical" margin={5}/>
-                            <StockHeaderText>AAPL</StockHeaderText>
-                            <HeaderText>Apple Inc</HeaderText>
+                            <Marginer direction="vertical" margin={15}/>
+                            <StockHeaderText>{symbol}</StockHeaderText>
                             <SubText>Add to Watchlist {plus}</SubText> 
                         </StockTitle>
-                        <PercentChange>
-                            <Marginer direction="vertical" margin={15} />
-                            <PercentChangeHeaderText>-7.90%</PercentChangeHeaderText>
-                            <Marginer direction="vertical" margin={5} />
-                            <PercentChangeText>$3,503.00</PercentChangeText>
-                            <Marginer direction="vertical" margin={5} />
-                            <PercentChangeText>-$100.56</PercentChangeText>
-                        </PercentChange>
+                        <StockData stockSymbol={symbol}/>
                         <BuySell>
-                            <Marginer direction="vertical" margin={10} />
+                            <Marginer direction="vertical" margin={15} />
                             <Buy>
                                 <Input type="search" placeholder="Shares"/>
                                 <Marginer direction="horizontal" margin={10} />
@@ -236,7 +211,7 @@ export function Trade(props) {
                             <Marginer direction="horizontal" margin={10} />
                             <HeaderText>Price History</HeaderText>
                         </Header>
-                        <StockChart />
+                        <StockChart stockSymbol={symbol}/>
                     </GraphContainer>
                 </MainColumn>
                 <SideColumn>
