@@ -75,3 +75,27 @@ export function FrequencyButton(props) {
     </FormControl>
   );
 }
+
+export function AccountButton(props) {
+  
+  const [account, setAccount] = React.useState('');
+
+  const handleChange = (event) => {
+    setAccount(event.target.value);
+  };
+
+  return (
+    <FormControl sx={{ m: 1, minWidth: 150 }}>
+      <Select
+        value={account}
+        onChange={handleChange}
+        displayEmpty
+      >
+      <MenuItem value="">
+        <em>All accounts</em>
+      </MenuItem>
+      <MenuItem value={"once"}>Personal account</MenuItem>
+      </Select>
+    </FormControl>
+  );
+}

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Marginer } from "../../components/marginer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from "../../components/button";
+import StockChart from "../../components/stockChart";
 import { faPlusSquare,
          faGlasses,
          faBriefcase,
@@ -235,6 +236,7 @@ export function Trade(props) {
                             <Marginer direction="horizontal" margin={10} />
                             <HeaderText>Price History</HeaderText>
                         </Header>
+                        <StockChart />
                     </GraphContainer>
                 </MainColumn>
                 <SideColumn>

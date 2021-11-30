@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Marginer } from "../../components/marginer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from "../../components/button";
+import { AccountButton } from "../../components/dropdownButton"
 import { faGlasses, 
          faWallet,
          faBriefcase,
@@ -58,14 +59,42 @@ const Summary = styled.div`
     background-color: #FFFFFF;
 `;
 
+const SummaryInfo = styled.div`
+    width: 100%;
+    height: 10%;
+    justify-content: space-evenly;
+    display: flex;
+`;  
+
 const WatchList = styled.div`
-    width: 90%;
+    width: 86%;
     height: 63%;
     outline-style: solid;
     outline-width: thin;
     outline-color: #E5E5E5;
     background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    align: center;
+    padding-left: 15px;
 `;
+
+const InnerWatchList = styled.div`
+    width: 95%;
+    height: 99%;
+    display: flex;
+    align: center;
+    flex-direction: column;
+`;
+
+const WatchListCard= styled.div`
+    width: 100%;
+    height: 20%;
+    outline-style: solid;
+    outline-width: thin;
+    outline-color: #E5E5E5;
+    background-color: #FFFFFF;
+`;  
 
 const AccountHistory = styled.div`
     width: 90%;
@@ -83,6 +112,7 @@ const Positions = styled.div`
     outline-width: thin;
     outline-color: #E5E5E5;
     background-color: #FFFFFF;
+    
 `;
 
 const Header = styled.h3`
@@ -119,6 +149,16 @@ export function User(props) {
                             <Marginer direction="horizontal" margin={10} />
                             <HeaderText>Account Summary</HeaderText>
                         </Header>
+                        <AccountButton />
+                        <Marginer direction="vertical" margin={15} />
+                        <SummaryInfo>
+                            <SubText>Account value</SubText>
+                            <SubText>$100</SubText>
+                        </SummaryInfo>
+                        <SummaryInfo>
+                            <SubText>Buying power</SubText>
+                            <SubText>$500</SubText>
+                        </SummaryInfo>
                     </Summary>
                     <Marginer direction="vertical" margin={15} />
                     <WatchList>
@@ -127,6 +167,19 @@ export function User(props) {
                             <Marginer direction="horizontal" margin={10} />
                             <HeaderText>Watchlist</HeaderText>
                         </Header>
+                        <InnerWatchList>
+                            <WatchListCard>
+                                AAPL
+                            </WatchListCard>
+                            <Marginer direction="vertical" margin={10} />
+                            <WatchListCard>
+                                AAPL
+                            </WatchListCard>
+                            <Marginer direction="vertical" margin={10} />
+                            <WatchListCard>
+                                AAPL
+                            </WatchListCard>
+                        </InnerWatchList>
                     </WatchList>
                 </LeftColumn>
                 <CenterColumn>
