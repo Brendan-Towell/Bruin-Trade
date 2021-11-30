@@ -47,8 +47,12 @@ export function Userbar(props) {
             <BrandLogo width={10} height={2.5}/>
         </Link>
         <AccessibilityContainer>
-            <Link to="/transfer" style={{ textDecoration: 'none' }} >
-                <AnchorLink>Transfer</AnchorLink>
+            <Link to="/trade" style={{ textDecoration: 'none' }} >
+                <AnchorLink>Trade</AnchorLink>
+            </Link>
+            <Marginer direction="horizontal" margin={14} />
+            <Link to="/deposit" style={{ textDecoration: 'none' }} >
+                <AnchorLink>Deposit</AnchorLink>
             </Link>
             <Marginer direction="horizontal" margin={14} />
             <Link to="/" style={{ textDecoration: 'none' }} >

@@ -1,14 +1,14 @@
 import React from "react";
 import { PageContainer } from "../../components/pageContainer";
-import { Transfer } from "./transfer";
+import { Trade } from "./trade";
 import { Userbar } from "../../components/userbar";
 
-export function TransferPage(props) {
+export function TradePage(props) {
     return (
     <PageContainer>
-        <Transfer>
-            <Userbar />
-        </Transfer>
+        <Trade>
+            <Userbar/>
+        </Trade>
     </PageContainer>
     );
 }
