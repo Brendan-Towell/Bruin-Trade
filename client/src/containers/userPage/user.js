@@ -7,14 +7,12 @@ import { Button } from "../../components/button";
 import { faGlasses, 
          faWallet,
          faBriefcase,
-         faChartLine,
-         faPlusSquare } from '@fortawesome/free-solid-svg-icons'
+         faChartLine } from '@fortawesome/free-solid-svg-icons'
 
 const glasses = <FontAwesomeIcon icon={faGlasses} />
 const wallet = <FontAwesomeIcon icon={faWallet} />
 const bag = <FontAwesomeIcon icon={faBriefcase} />
 const chart = <FontAwesomeIcon icon={faChartLine} />
-const plus = <FontAwesomeIcon icon={faPlusSquare} />
 
 const UserPageContainer = styled.div`
     width: 100%;
@@ -72,42 +70,11 @@ const WatchList = styled.div`
 
 const AccountHistory = styled.div`
     width: 90%;
-    height: 73%;
+    height: 95%;
     outline-style: solid;
     outline-width: thin;
     outline-color: #E5E5E5;
     background-color: #FFFFFF;
-`;
-
-const CurrentStock = styled.div`
-    width: 90%;
-    height: 20%;
-    display: flex;
-    outline-style: solid;
-    outline-width: thin;
-    outline-color: #E5E5E5;
-    background-color: #FFFFFF;
-    flex-direction: row;
-`;
-
-const StockTitle = styled.div`
-    width: 30%;
-    height: 100%;
-    text-align: left;
-    padding: 15px;
-`;
-
-const StockTransact = styled.div`
-    width: 70%;
-    height: 100%;
-    justify: center;
-`;
-
-const BuySell = styled.div`
-    width: 100%;
-    height: 80%;
-    display: flex;
-    justify-content: space-evenly;
 `;
 
 const Positions = styled.div`
@@ -139,16 +106,6 @@ const SubText = styled.h3`
     font-size: 12px;
 `;
 
-const StockHeaderText = styled.h3`
-    margin: 0;
-    line-height: 1.4;
-    font-weight: 400;
-    font-size: 30px;
-`;
-
-const PercentChangeText = styled.h5`
-    color: red;
-`;
 export function User(props) {
     const { children } = props;
     return (
@@ -158,7 +115,6 @@ export function User(props) {
             <UserPageInnerContainer>
                 <LeftColumn>
                     <Summary>
-                        <Marginer direction="vertical" margin={10} />
                         <Header>
                             {wallet}
                             <Marginer direction="horizontal" margin={10} />
@@ -167,7 +123,6 @@ export function User(props) {
                     </Summary>
                     <Marginer direction="vertical" margin={15} />
                     <WatchList>
-                        <Marginer direction="vertical" margin={10} />
                         <Header>
                             {glasses}
                             <Marginer direction="horizontal" margin={10} />
@@ -176,26 +131,7 @@ export function User(props) {
                     </WatchList>
                 </LeftColumn>
                 <CenterColumn>
-                    <CurrentStock>
-                        <StockTitle>
-                            <Marginer direction="vertical" margin={10} />
-                            <StockHeaderText>AAPL</StockHeaderText>
-                            <HeaderText>Apple Inc</HeaderText>
-                            <SubText>Add to Watchlist {plus}</SubText> 
-                        </StockTitle>
-                        <StockTransact>
-                            <Marginer direction="vertical" margin={15} />
-                            <PercentChangeText>3,503.00 -1.56 (-0.04%)</PercentChangeText>
-                            <Marginer direction="vertical" margin={0} />
-                            <BuySell>
-                                <Button size={12} width={100} height={30}>Buy</Button>
-                                <Button size={12} width={100} height={30}>Sell</Button>
-                            </BuySell>
-                        </StockTransact>
-                    </CurrentStock>
-                    <Marginer direction="vertical" margin={15} />
                     <AccountHistory>
-                        <Marginer direction="vertical" margin={10} />
                         <Header>
                             {chart}
                             <Marginer direction="horizontal" margin={10} />
@@ -205,7 +141,6 @@ export function User(props) {
                 </CenterColumn>
                 <RightColumn>
                     <Positions>
-                        <Marginer direction="vertical" margin={10} />
                         <Header>
                             {bag}
                             <Marginer direction="horizontal" margin={10} />

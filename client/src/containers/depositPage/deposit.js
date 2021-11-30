@@ -7,12 +7,12 @@ import { TransferFromButton,
          TransferToButton,
          FrequencyButton } from "../../components/dropdownButton";
 
-const TransferPageContainer = styled.div`
+const DepositPageContainer = styled.div`
     width: 100%;
     height: 100vh;
 `;
 
-const TransferPageInnerContainer = styled.div`
+const DepositPageInnerContainer = styled.div`
     width: 100%;
     height: 100%;
     display: flex;
@@ -96,12 +96,12 @@ const Seperator = styled.div`
     background-color: #D3D3D3;
 `;
 
-export function Transfer(props) {
+export function Deposit(props) {
     const { children } = props;
     return (
-    <TransferPageContainer>
+    <DepositPageContainer>
         {children}
-            <TransferPageInnerContainer>
+            <DepositPageInnerContainer>
                 <HeaderText>Transfer money from an account</HeaderText>
                 <Seperator />
                 <HeaderContainer>
@@ -156,7 +156,7 @@ export function Transfer(props) {
                 <ActionContainer>
                     <Button size={12} width={100} height={40}>Continue</Button>
                 </ActionContainer>
-            </TransferPageInnerContainer>
-    </TransferPageContainer>
+            </DepositPageInnerContainer>
+    </DepositPageContainer>
     );
 }
