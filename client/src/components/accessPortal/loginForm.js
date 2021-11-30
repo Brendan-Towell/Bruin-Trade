@@ -23,7 +23,7 @@ export function LoginForm() {
       <SubmitButton type="submit" onClick={async () => {await axios.get('http://localhost:8080/loginattempt',{
       params: {
         email: document.getElementById("email").value,
-        pwd1: document.getElementById("password").value
+        password: document.getElementById("password").value
       }
       })}}>Signup</SubmitButton>
       <Marginer direction="vertical" margin="1em" />

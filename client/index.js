@@ -83,20 +83,22 @@ app.get('/getdata2', (req, res, next) => {
 
 // Server processing login attempt from client
 app.get('/loginattempt', (req, res, next) => {
-  let uname = req.query.email;
+  let email = req.query.email;
   let pwd = req.query.password;
+  console.log('email: ' + email);
+  console.log('password: ' + pwd);
   
   // Check for username in user database
-  let sql = `SELECT * FROM '${user_login_table}' WHERE username = '${uname}'`;
+  let sql = `SELECT * FROM ${user_login_table} WHERE email = '${email}'`;
   let query = db.query(sql, (err, result) => {
       if(err) throw err;    //Throw error if received from query
 
       if (result.length <= 0) {   //If username not in database, exit
-        res.send("Username not found in database");
+        res.send("email not found in database");
       }
       else{
         // If username and password match database entry, successful login
-        if(uname == result[0].username && pwd == result[0].password_hash){  
+        if(email == result[0].email && pwd == result[0].password_hash){  
           console.log("VALID CREDENTIALS");
           res.send("VALID CREDENTIALS");
         }
