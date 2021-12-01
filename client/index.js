@@ -3,6 +3,7 @@ const mysql = require('mysql') //Import mysql
 const cors = require('cors') // Import cors
 const app = express() // Call express as a function
 const { default: axios } = require('axios');
+const { extractEventHandlers } = require('@mui/base');
 
 app.use(cors()) // Enable cors
 
@@ -21,7 +22,7 @@ db.connect((err) => {
 // Name of table for user login credentials in database
 const user_login_table = 'user_login_info';
 const user_watchlists_table = 'user_watchlists';
-
+const account_balance_table = 'account_financial_data';
 
 //Create entry for user in table
 app.get('/insertuser', (req, res) => {
@@ -88,8 +89,9 @@ app.get('/deleteUser', (req, res) => {
 
 // Add stock to a users watchlist
 app.get('/addStockToWatchlist', (req,res) => {
-  let stock_symbol = req.params.stock_symbol;
-  let user_id = req.params.id;
+  let stock_symbol = req.query.stock_symbol;
+  let user_id = req.query.user_id;
+  // Check if stock already on watchlist
   let sql = `SELECT * FROM ${user_watchlists_table} WHERE user_id = '${user_id}' AND stock_symbol = '${stock_symbol}'`;
   let query = db.query(sql, (err, result) =>{
     if (err) throw err;
@@ -108,8 +110,9 @@ app.get('/addStockToWatchlist', (req,res) => {
 
 // Remove stock from a users watchlist
 app.get('/removeStockFromWatchlist', (req,res) => {
-  let stock_symbol = req.params.stock_symbol;
-  let user_id = req.params.id;
+  let stock_symbol = req.query.stock_symbol;
+  let user_id = req.query.user_id;
+  // Make sure stock on watchlist before removing
   let sql = `SELECT * FROM ${user_watchlists_table} WHERE user_id = '${user_id}' AND stock_symbol = '${stock_symbol}'`;
   let query = db.query(sql, (err, result) =>{
     if (err) throw err;
@@ -127,17 +130,48 @@ app.get('/removeStockFromWatchlist', (req,res) => {
 })
 
 
+
+// Return all stocks on a specified users watchlist
+app.get('/getUsersWatchlist', (req,res) => {
+  let user_id = req.query.user_id;
+  let sql = `SELECT * FROM ${user_watchlists_table} WHERE user_id = '${user_id}'`;
+  
+  let query = db.query(sql, (err, result) =>{
+    if (err) throw err;
+    let stock_list = []
+    for (var i = 0; i < result.length; i++) {
+      let symbol = result[i].stock_symbol;
+      stock_list.push(symbol);
+    }
+    res.send(stock_list);
+  })
+}) 
+
+
+
+app.get('/addToAccountBalance', (req,res) => {
+  let user_id = req.query.id;
+  let trans_amt = req.query.id;
+
+  //Add amount to cash available since all deposits are cash
+  let cash_sql = `UPDATE ${account_balance_table} SET cash_available = cash_available+${trans_amt} WHERE user_id = '${user_id}'`;
+  let cash_query = db.query(cash_sql, (err, result) => {
+    if (err) throw err;
+    res.send({status:"succesfully added money to account balance"})
+  })
+  
+  //Add amount to total account value/balance
+  let sql = `UPDATE ${account_balance_table} SET account_balance = account_balance+${trans_amt} WHERE user_id = '${user_id}'`;
+  let query = db.query(sql, (err, result) => {
+    if (err) throw err;
+    res.send({status:"succesfully added money to account balance"})
+  })
+
+})
+
+
 app.listen(8080, (req, res) => { // Run a server
   console.log("SERVER IS RUNNING ON 8080");
-})
-
-app.get('/getdata1', (req, res, next) => {
-  res.send("HELLO FROM SERVER")
-})
-
-app.get('/getdata2', (req, res, next) => {
-  console.log("getdata2");
-  res.send("GOOD NIGHT FROM SERVER");
 })
 
 // Server processing login attempt from client

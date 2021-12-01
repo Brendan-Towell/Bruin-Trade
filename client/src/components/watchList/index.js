@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGlasses,
          faSearch } from '@fortawesome/free-solid-svg-icons'
 import { red } from "@mui/material/colors";
+import axios from "axios";
 
 const glasses = <FontAwesomeIcon icon={faGlasses} />
 const search = <FontAwesomeIcon icon={faSearch} />
@@ -93,19 +94,43 @@ class WatchList extends Component {
     
     constructor(props) {
         super(props);
+        
         this.state = {
-            stockSymbols : [ 'AAPL', 'AMZN', 'TSLA' ],
+            stockSymbols : [],
             message: ''
         }
     }
+
+
+    // Gets users watchlist fromd database for displaying
+    componentDidMount() {
+        const response = axios.get('http://localhost:8080/getUsersWatchlist',{
+            params: {
+                user_id: localStorage.getItem("token")
+            }
+        })
+            .then((response) => {
+                this.setState({
+                    stockSymbols: response.data
+                })
+            })
+        }
+    
 
     addItem(e) {
         e.preventDefault();
         const {stockSymbols} = this.state;
         const newSymbol = this.newSymbol.value;
 
-        const isOnList = stockSymbols.includes(newSymbol);
+        //Adds stock to watchlist for user in database
+        const response = axios.get('http://localhost:8080/addStockToWatchlist',{
+            params: {
+                stock_symbol: document.getElementById("newItemInput").value,
+                user_id: localStorage.getItem("token"),
+            }
+        })
 
+        const isOnList = stockSymbols.includes(newSymbol);
         if (isOnList) {
             this.setState({
                 message: 'This item is already on the list.'
@@ -119,6 +144,14 @@ class WatchList extends Component {
     }
 
     removeSymbol(symbol) {
+        
+        const response = axios.get('http://localhost:8080/removeStockFromWatchlist',{
+            params: {
+                stock_symbol: symbol,
+                user_id: localStorage.getItem("token"),
+            }
+        })
+        
         const newStockSymbols = this.state.stockSymbols.filter(stockSymbol => {
             return stockSymbol !== symbol;
         })
