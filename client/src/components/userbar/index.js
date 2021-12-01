@@ -41,6 +41,10 @@ const Seperator = styled.div`
 
 export function Userbar(props) {
     const { useTransparent } = props;
+
+    const handleLogout = (event) => {
+        localStorage.setItem("token", -1);
+    }
     
     return (
     <NavBarContainer useTransparent={useTransparent}>
@@ -58,7 +62,7 @@ export function Userbar(props) {
             <Marginer direction="horizontal" margin={10} />
             <Seperator />
             <Marginer direction="horizontal" margin={10} />
-            <Link to="/" style={{ textDecoration: 'none' }} >
+            <Link to="/" style={{ textDecoration: 'none' }} onClick={handleLogout}>
                 <AnchorLink>Logout</AnchorLink>
             </Link>
             <Marginer direction="horizontal" margin={14} />

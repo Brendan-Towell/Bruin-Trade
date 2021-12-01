@@ -33,21 +33,24 @@ app.get('/insertuser', (req, res) => {
     let query = db.query(sql, (err, result) =>{
       if (err) throw err;
       if (result.length > 0){
-        res.send("error: email has already been used to register an account");
+        res.send({status:"error: email has already been used to register an account",token:-1});
         return;
       }
       else{
         sql = `INSERT INTO ${user_login_table} SET ?`;
         query = db.query(sql, user, (err, result) => {
             if (err) throw err;
-            //console.log(result)
-            res.send("account created successfully");
-          });
+        });
+        sql = `SELECT * FROM ${user_login_table} WHERE email = '${email}'`;
+        query = db.query(sql, (err, result) => {
+          if (err) throw err;
+          res.send({status:"account created successfully",token:result[0].id});
+        });
       }
     });
   }
   else{
-    res.send("error: passwords don't match");
+    res.send({status:"error: passwords don't match",token:"-1"});
   }
 });
 
@@ -101,16 +104,16 @@ app.get('/loginattempt', (req, res, next) => {
       if(err) throw err;    //Throw error if received from query
 
       if (result.length <= 0) {   //If email not in database, exit
-        res.send("invalid credentials");
+        res.send({status:"invalid credentials", token:-1});
       }
       else{
         // If username and password match database entry, successful login
         if(email == result[0].email && pwd == result[0].password_hash){
-          res.send("valid credentials");
+          res.send({status:"valid credentials", token:result[0].id});
         }
         // Input password not match database entry therefore failed login
         else{
-          res.send("invalid credentials");
+          res.send({status:"invalid credentials", token:-1});
         }
       }
     });

@@ -22,12 +22,13 @@ export function LoginForm() {
       }
     });
     setValidation(response.data);
-    if(response.data != "valid credentials"){
+    if(response.data.status != "valid credentials"){
       alert(response.data);
       document.getElementById("email").value = "";
       document.getElementById("password").value = "";
     }
     else{
+      localStorage.setItem("token", response.data.token);
       window.location.href = '/home';
     }
   }

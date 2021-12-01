@@ -21,14 +21,14 @@ export function SignupForm() {
         pwd2: document.getElementById("password2").value
       }
     });
-    if(response.data !== "account created successfully"){
-      alert(response.data);
+    if(response.data.status !== "account created successfully"){
       document.getElementById("name").value = "";
       document.getElementById("email").value = "";
       document.getElementById("password1").value = "";
       document.getElementById("password2").value = "";
     }
     else{
+      localStorage.setItem("token", response.data.token);
       window.location.href = '/home';
     }
 
@@ -37,7 +37,7 @@ export function SignupForm() {
 
   return (
     <BoxContainer>
-      <FormContainer action="./testfunction">
+      <FormContainer>
         <Input type="text" placeholder="Full Name" id="name"/>
         <Input type="email" placeholder="Email" id="email"/>
         <Input type="password" placeholder="Password" id="password1"/>

@@ -1,3 +1,4 @@
+import SelectInput from "@mui/material/Select/SelectInput";
 import React from "react";
 import styled from "styled-components";
 
@@ -12,6 +13,7 @@ export function User(props) {
         <UserPageContainer>
             {children} 
             <h1>Account Dashboard</h1>
+            <h2>{localStorage.getItem("token")}</h2>
         </UserPageContainer>
     );
 }
