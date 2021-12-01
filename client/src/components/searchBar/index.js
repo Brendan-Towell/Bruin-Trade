@@ -64,13 +64,14 @@ class SearchBar extends Component {
             word: '',
             result: []
         }
+        this.handleType = this.handleType.bind(this);
     }
 
-    async handleType(event) {
-        console.log(event.target.value);
-        //this.setState({word: event.target.value});
-        let url = `https://sandbox.iexapis.com/stable/search/${'tsla'}?token=Tpk_1fa3ca794f3940949c492fee0615dcf5`;
-        await fetch(url).then((response) => response.json()).then((data) => this.setState({result: data}));
+    handleType(event) {
+        this.setState({word: event.target.value});
+        console.log(this.state.word)
+        let url = `https://sandbox.iexapis.com/stable/search/${event.target.value}?token=Tpk_1fa3ca794f3940949c492fee0615dcf5`;
+        fetch(url).then((response) => response.json()).then((data) => this.setState({result: data}));
     }
 
     render () {
@@ -81,13 +82,13 @@ class SearchBar extends Component {
                 <Input 
                     type="search" 
                     placeholder="Search"
-                    value= {this.state.word}
+                    /*value= {this.state.word}*/
                     onChange={this.handleType} />
                 {this.state.result.length > 0 && (
                     <Result>
                         {this.state.result.map((res) => {
                             return (
-                                <p>{res.symbol}</p>
+                                <p>{res.exchange}: {res.symbol}</p>
                             );
                         })}
                     </Result>
