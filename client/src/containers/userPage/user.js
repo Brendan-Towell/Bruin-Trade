@@ -7,6 +7,8 @@ import { faWallet,
          faBriefcase,
          faChartLine } from '@fortawesome/free-solid-svg-icons'
 import WatchList from "../../components/watchList";
+import AccountChart from "../../components/accountChart";
+import PositionList from "../../components/positionList";
 
 const wallet = <FontAwesomeIcon icon={faWallet} />
 const bag = <FontAwesomeIcon icon={faBriefcase} />
@@ -80,7 +82,8 @@ const Positions = styled.div`
     outline-width: thin;
     outline-color: #E5E5E5;
     background-color: #FFFFFF;
-    
+    display: flex;
+    align-items: center;
 `;
 
 const Header = styled.h3`
@@ -103,6 +106,12 @@ const SubText = styled.h3`
     font-size: 12px;
 `;
 
+const WatchContainer = styled.div`
+    height: 63%;
+    width:90%;
+    display: flex;
+    align: center;
+`;
 export function User(props) {
     const { children } = props;
     return (
@@ -129,7 +138,9 @@ export function User(props) {
                         </SummaryInfo>
                     </Summary>
                     <Marginer direction="vertical" margin={15} />
-                    <WatchList />
+                    <WatchContainer>
+                        <WatchList />
+                    </WatchContainer>
                 </LeftColumn>
                 <CenterColumn>
                     <AccountHistory>
@@ -138,15 +149,12 @@ export function User(props) {
                             <Marginer direction="horizontal" margin={10} />
                             <HeaderText>Moving Account Balance</HeaderText>
                         </Header>
+                        <AccountChart />
                     </AccountHistory>
                 </CenterColumn>
                 <RightColumn>
                     <Positions>
-                        <Header>
-                            {bag}
-                            <Marginer direction="horizontal" margin={10} />
-                            <HeaderText>Positions</HeaderText>
-                        </Header>
+                        <PositionList />
                     </Positions>
                 </RightColumn>
             </UserPageInnerContainer>

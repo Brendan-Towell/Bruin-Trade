@@ -14,9 +14,8 @@ import { faPlusSquare,
 import CurrentPrice from "../../components/stockData/currentPrice";
 import PercentChange from "../../components/stockData/percentChange";
 import PriceChange from "../../components/stockData/priceChange";
+import PositionList from "../../components/positionList";
 
-const glasses = <FontAwesomeIcon icon={faGlasses} />
-const bag = <FontAwesomeIcon icon={faBriefcase} />
 const plus = <FontAwesomeIcon icon={faPlusSquare} />
 const search = <FontAwesomeIcon icon={faSearch} />
 const chart = <FontAwesomeIcon icon={faChartLine} />
@@ -51,9 +50,11 @@ const SideColumn = styled.div`
 
 const Positions = styled.div`
     width: 90%;
-    height: 44%;
+    height: 40%;
     outline-style: solid;
     outline-width: thin;
+    display: flex;
+    align-items: center;
     outline-color: #E5E5E5;
     background-color: #FFFFFF;
 `;
@@ -124,7 +125,7 @@ const Sell = styled.div`
 `;
 
 const SearchBar = styled.div`
-    width: 82%;
+    width: 90%;
     height: 2%;
     padding: 10px; 
     background-color: #FFFFFF;
@@ -133,8 +134,14 @@ const SearchBar = styled.div`
     flex-direction: row;
 `;
 
+const Form = styled.form`
+    display: flex;
+    flex-direction: row;
+    width: 95%;
+`;
+
 const Input = styled.input`
-  width: 85%;
+  width: 95%;
   height: 25px;
   outline: solid;
   outline-width: thin;
@@ -182,12 +189,24 @@ const SubText = styled.h3`
     font-size: 12px;
 `;
 
+const WatchContainer = styled.div`
+    height: 46%;
+    width:90%;
+    display: flex;
+    align: center;
+`;
+
 class Trade extends Component {
     
     constructor(props) {
         super(props);
         this.state = {
-            symbol : 'AAPL'
+            symbol : 
+                props.stockSymbol !== undefined
+                    ? props.stockSymbol
+                    : 'AMZN'
+
+
         }
     }
 
@@ -257,22 +276,20 @@ class Trade extends Component {
                 </MainColumn>
                     <SideColumn>
                         <SearchBar>
-                        <form className="form-inline" onSubmit={(e) => {this.updateStock(e)}}>
+                        <Form className="form-inline" onSubmit={(e) => {this.updateStock(e)}}>
                             {search}
                             <Marginer direction="horizontal" margin={10} />
                             <Input ref={(input) => {this.newSymbol = input}} type="text" placeholder="Search" className="form-control" id="newItemInput"/>
-                        </form>
+                        </Form>
                         </SearchBar>
-                        <Marginer direction="vertical" margin={15} />
+                        <Marginer direction="vertical" margin={25} />
                         <Positions>
-                            <Header>
-                                {bag}
-                                <Marginer direction="horizontal" margin={10} />
-                                <HeaderText>Positions</HeaderText>
-                            </Header>
+                            <PositionList/>
                         </Positions>
                         <Marginer direction="vertical" margin={15} />
-                        <WatchList />
+                        <WatchContainer>
+                            <WatchList />
+                        </WatchContainer>
                 </SideColumn>
             </TradePageInnerContainer>          
         );

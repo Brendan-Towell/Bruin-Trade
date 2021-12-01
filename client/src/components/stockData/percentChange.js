@@ -43,11 +43,11 @@ class PercentChange extends React.Component {
         if (this.state.quote.change < 0)
         {
             return (
-                <NegativeChangeText>-{Format(this.state.quote.change)}%</NegativeChangeText> 
+                <NegativeChangeText>-{Format(this.state.quote.changePercent)}%</NegativeChangeText> 
             );
         } else {
             return (
-                <PositiveChangeText>+{Format(this.state.quote.change)}%</PositiveChangeText> 
+                <PositiveChangeText>+{Format(this.state.quote.changePercent)}%</PositiveChangeText> 
             );
         }
     }
