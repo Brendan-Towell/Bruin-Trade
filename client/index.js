@@ -50,11 +50,22 @@ app.get('/insertuser', (req, res) => {
         query = db.query(sql, user, (err, result) => {
             if (err) throw err;
         });
+        
+        let current_id = 0;
         sql = `SELECT * FROM ${user_login_table} WHERE email = '${email}'`;
         query = db.query(sql, (err, result) => {
           if (err) throw err;
           res.send({status:"account created successfully",token:result[0].id});
+          current_id = result[0].id;
         });
+        
+        sql = `INSERT INTO ${account_financial_data} SET ?`;
+        let user_financial = {user_id: current_id, account_balance: 0, cash_available: 0}
+        query = db.query(sql, user_financial, (err, result) => {
+          if (err) throw err;
+          res.send({status:"account financials initialized"})
+        })
+
       }
     });
   }
@@ -149,25 +160,27 @@ app.get('/getUsersWatchlist', (req,res) => {
 
 
 
-app.get('/addToAccountBalance', (req,res) => {
-  let user_id = req.query.id;
-  let trans_amt = req.query.id;
+app.get('/deposit', (req,res) => {
+  let user_id = req.query.user_id;
+  let trans_amt = req.query.deposit_amount;
 
   //Add amount to cash available since all deposits are cash
   let cash_sql = `UPDATE ${account_balance_table} SET cash_available = cash_available+${trans_amt} WHERE user_id = '${user_id}'`;
   let cash_query = db.query(cash_sql, (err, result) => {
-    if (err) throw err;
-    res.send({status:"succesfully added money to account balance"})
+    if (err) {
+      throw err;
+    }
   })
   
   //Add amount to total account value/balance
   let sql = `UPDATE ${account_balance_table} SET account_balance = account_balance+${trans_amt} WHERE user_id = '${user_id}'`;
   let query = db.query(sql, (err, result) => {
-    if (err) throw err;
-    res.send({status:"succesfully added money to account balance"})
+    if (err) {
+      throw err;
+    }
   })
-
 })
+
 
 
 app.listen(8080, (req, res) => { // Run a server

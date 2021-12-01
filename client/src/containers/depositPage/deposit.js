@@ -1,4 +1,5 @@
-import React from "react";
+import axios from "axios";
+import React, { Component } from "react";
 import styled from "styled-components";
 import { Marginer } from "../../components/marginer";
 import { Button } from "../../components/button";
@@ -96,67 +97,95 @@ const Seperator = styled.div`
     background-color: #D3D3D3;
 `;
 
-export function Deposit(props) {
-    const { children } = props;
-    return (
-    <DepositPageContainer>
-        {children}
-            <DepositPageInnerContainer>
-                <HeaderText>Transfer money from an account</HeaderText>
-                <Seperator />
-                <HeaderContainer>
-                    <SubHeaderText>Which account do you want to move money from?</SubHeaderText>
-                </HeaderContainer>
-                <ActionContainer>
-                    <FormContainer>
-                        <SubText>From</SubText>
-                        <Marginer direction="horizontal" margin={15} />
-                        <TransferFromButton />
-                    </FormContainer>
-                </ActionContainer>
-                <Seperator />
-                <HeaderContainer>
-                    <SubHeaderText>Where will the money be transferred to?</SubHeaderText>
-                </HeaderContainer>
-                <ActionContainer>
-                    <FormContainer>
-                        <SubText>To</SubText>
-                        <Marginer direction="horizontal" margin={15} />
-                        <TransferToButton />
-                    </FormContainer>
-                </ActionContainer>
-                <Seperator />
-                <HeaderContainer>
-                    <SubHeaderText>Enter your transfer details</SubHeaderText>
-                </HeaderContainer>
-                <ActionContainer>
-                    <FormContainer>
-                        <SubText>Frequency</SubText>
-                        <Marginer direction="horizontal" margin={15} />
-                        <FrequencyButton />
-                    </FormContainer>
-                    <FormContainer>
-                        <SubText>Date</SubText>
-                        <Marginer direction="horizontal" margin={15} />
-                        <Input type="date" placeholder="Date" />
-                    </FormContainer>
-                    <Marginer direction="vertical" margin={15} />
-                    <FormContainer>
-                        <SubText>Amount</SubText>
-                        <Marginer direction="horizontal" margin={15} />
-                        <Input type="amount" placeholder="$" />
-                    </FormContainer>
-                </ActionContainer>
-                <Seperator />
-                <HeaderContainer>
-                    <Link to="/home" style={{ textDecoration: 'none' }} >
-                        <LinkText>Exit to portfolio summary</LinkText>
-                    </Link>
-                </HeaderContainer>
-                <ActionContainer>
-                    <Button size={12} width={100} height={40}>Continue</Button>
-                </ActionContainer>
-            </DepositPageInnerContainer>
-    </DepositPageContainer>
-    );
+class Deposit extends Component {
+    
+    constructor(props) { 
+        super(props);
+        this.state = {
+            amount: 0
+        }
+    }
+
+    handleSubmit(val) {
+        val.preventDefault();
+        const amount = this.amount.value;
+
+        const response = axios.get('http://localhost:8080/deposit', {
+            params: {
+                deposit_amount: amount,
+                user_id: localStorage.getItem("token"),
+            }
+        })
+            .then((response) => {
+                console.log(response.status)
+            })
+        window.location.reload();
+    }
+
+
+    
+    render() {
+        return (
+        <DepositPageContainer>
+            {this.props.children}
+                <DepositPageInnerContainer>
+                    <HeaderText>Transfer money from an account</HeaderText>
+                    <Seperator />
+                    <HeaderContainer>
+                        <SubHeaderText>Which account do you want to move money from?</SubHeaderText>
+                    </HeaderContainer>
+                    <ActionContainer>
+                        <FormContainer>
+                            <SubText>From</SubText>
+                            <Marginer direction="horizontal" margin={15} />
+                            <TransferFromButton />
+                        </FormContainer>
+                    </ActionContainer>
+                    <Seperator />
+                    <HeaderContainer>
+                        <SubHeaderText>Where will the money be transferred to?</SubHeaderText>
+                    </HeaderContainer>
+                    <ActionContainer>
+                        <FormContainer>
+                            <SubText>To</SubText>
+                            <Marginer direction="horizontal" margin={15} />
+                            <TransferToButton />
+                        </FormContainer>
+                    </ActionContainer>
+                    <Seperator />
+                    <HeaderContainer>
+                        <SubHeaderText>Enter your transfer details</SubHeaderText>
+                    </HeaderContainer>
+                    <ActionContainer>
+                        <FormContainer>
+                            <SubText>Frequency</SubText>
+                            <Marginer direction="horizontal" margin={15} />
+                            <FrequencyButton />
+                        </FormContainer>
+                        <FormContainer>
+                            <SubText>Date</SubText>
+                            <Marginer direction="horizontal" margin={15} />
+                            <Input type="date" placeholder="Date" />
+                        </FormContainer>
+                        <Marginer direction="vertical" margin={15} />
+                        <FormContainer onSubmit={(amt) => {this.handleSubmit(amt)}}>
+                            <SubText>Amount</SubText>
+                            <Marginer direction="horizontal" margin={15} />
+                            <Input ref={(input) => {this.amount = input}} type="amount" placeholder="$" id="deposit_amt"/>
+                            <ActionContainer>
+                                <Button size={12} width={100} height={40} type="submit" >Continue</Button>
+                            </ActionContainer>
+                        </FormContainer>
+                    </ActionContainer>
+                    <Seperator />
+                    <HeaderContainer>
+                        <Link to="/home" style={{ textDecoration: 'none' }} >
+                            <LinkText>Exit to portfolio summary</LinkText>
+                        </Link>
+                    </HeaderContainer>
+                </DepositPageInnerContainer>
+        </DepositPageContainer>
+        );
+    }
 }
+export default Deposit;
