@@ -20,6 +20,8 @@ db.connect((err) => {
 
 // Name of table for user login credentials in database
 const user_login_table = 'user_login_info';
+const user_watchlists_table = 'user_watchlists';
+
 
 //Create entry for user in table
 app.get('/insertuser', (req, res) => {
@@ -84,6 +86,45 @@ app.get('/deleteUser', (req, res) => {
     });
 });
 
+// Add stock to a users watchlist
+app.get('/addStockToWatchlist', (req,res) => {
+  let stock_symbol = req.params.stock_symbol;
+  let user_id = req.params.id;
+  let sql = `SELECT * FROM ${user_watchlists_table} WHERE user_id = '${user_id}' AND stock_symbol = '${stock_symbol}'`;
+  let query = db.query(sql, (err, result) =>{
+    if (err) throw err;
+    if (result.length > 0){
+      res.send({status:"error: stock already on watchlist for user"});
+    }
+    else {
+      let insert_query = `INSERT INTO ${user_watchlists_table} (user_id, stock_symbol) VALUES ('${user_id}', '${stock_symbol}')`;
+      let query = db.query(insert_query, (err, result) => {
+        if (err) throw err;
+        res.send({status:"stock added to user's watchlist"})
+      })
+    }
+  })
+})
+
+// Remove stock from a users watchlist
+app.get('/removeStockFromWatchlist', (req,res) => {
+  let stock_symbol = req.params.stock_symbol;
+  let user_id = req.params.id;
+  let sql = `SELECT * FROM ${user_watchlists_table} WHERE user_id = '${user_id}' AND stock_symbol = '${stock_symbol}'`;
+  let query = db.query(sql, (err, result) =>{
+    if (err) throw err;
+    if (result.length == 0){
+      res.send({status:"error: stock not on watchlist cannot be removed"});
+    }
+    else {
+      let delete_query = `DELETE FROM ${user_watchlists_table} WHERE user_id = '${user_id}' AND stock_symbol = '${stock_symbol}'`;
+      let query = db.query(delete_query, (err, result) => {
+        if (err) throw err;
+        res.send({status:"stock removed from user's watchlist"});
+      })
+    }
+  })
+})
 
 
 app.listen(8080, (req, res) => { // Run a server
