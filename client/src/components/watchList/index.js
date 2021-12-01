@@ -5,6 +5,7 @@ import { Button } from "../button";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGlasses,
          faSearch } from '@fortawesome/free-solid-svg-icons'
+import { red } from "@mui/material/colors";
 
 const glasses = <FontAwesomeIcon icon={faGlasses} />
 const search = <FontAwesomeIcon icon={faSearch} />
@@ -38,7 +39,7 @@ const SearchBar = styled.div`
     background-color: #FFFFFF;
     display: flex;
     justify-content: center;
-    alignt: center;
+    align: center;
     flex-direction: row;
 `;
 
@@ -66,11 +67,13 @@ const Input = styled.input`
 
 const WatchListCard= styled.div`
     width: 100%;
-    height: 300px;
+    height: 75px;
     outline-style: solid;
     outline-width: thin;
     outline-color: #E5E5E5;
     background-color: #FFFFFF;
+    display: flex;
+    justify-content: space-evenly;
 `;  
 
 const Header = styled.h3`
@@ -87,17 +90,54 @@ const HeaderText = styled.h3`
 `;
 
 class WatchList extends Component {
-    state = {
-        stockSymbols : [
-            {id: 1, name: 'AAPL'},
-            {id: 2, name: 'AMZN'},
-            {id: 3, name: 'TSLA'},
-        ]
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+            stockSymbols : [ 'AAPL', 'AMZN', 'TSLA' ],
+            message: ''
+        }
+    }
+
+    addItem(e) {
+        e.preventDefault();
+        const {stockSymbols} = this.state;
+        const newSymbol = this.newSymbol.value;
+
+        const isOnList = stockSymbols.includes(newSymbol);
+
+        if (isOnList) {
+            this.setState({
+                message: 'This item is already on the list.'
+            })
+        } else {
+            newSymbol !== '' && this.setState({
+                stockSymbols: [...this.state.stockSymbols, newSymbol]
+            })
+        }
+        
+    }
+
+    removeSymbol(symbol) {
+        const newStockSymbols = this.state.stockSymbols.filter(stockSymbol => {
+            return stockSymbol !== symbol;
+        })
+        console.log(this.state.stockSymbols)
+
+        this.setState({
+            stockSymbols: [...newStockSymbols]
+        })
+        
+        if (newStockSymbols.length === 0){
+            this.setState({
+                message: 'No items on watchlist.'
+            })
+        }
     }
 
     render() {
-        const { stockSymbols } = this.state;
-    return (
+        const { stockSymbols, message } = this.state;
+        return (
         <WatchListContainer>
             <Header>
                 {glasses}
@@ -105,24 +145,35 @@ class WatchList extends Component {
                 <HeaderText>Watchlist</HeaderText>
             </Header>
             <InnerWatchListContainer>
+            {
+                (message !== '' || stockSymbols.length === 0 )&& <p className="message text-danger">{message}</p>
+            }
+            {
+            stockSymbols.length > 0 && 
+            <div>
                 {stockSymbols.map((symbol)=>{
                     return (
                         <WatchListCard>
-                            <HeaderText>{symbol.name}</HeaderText>
-                            <Marginer direction="vertical" margin={10} />
+                            <HeaderText>{symbol}</HeaderText>
+                            <button onClick={(e)=> this.removeSymbol(symbol)} type="button" color={red} width={50} height={10}>
+                                Remove
+                            </button>
                         </WatchListCard>
                     );
                 })}
+            </div>
+            }
                 <Marginer direction="vertical" margin={15} />
                 <SearchBar>
                     {search}
                     <Marginer direction="horizontal" margin={10} />
-                    <Input type="search" placeholder="Search"/>
-                    <Marginer direction="horizontal" margin={10} />
-                    <Button size={12} width={75} height={25}>Add</Button>
+                    <form className="form-inline" onSubmit={(e) => {this.addItem(e)}}>
+                        <Input ref={(input) => {this.newSymbol = input}} type="text" placeholder="Search" className="form-control" id="newItemInput"/>
+                        <Marginer direction="horizontal" margin={10} />
+                        <Button type="submit" size={12} width={75} height={25}>Add</Button>
+                    </form>
                 </SearchBar>
             </InnerWatchListContainer>
-            
         </WatchListContainer>
     );
     }
