@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Component } from "react";
 import styled from "styled-components";
 import { Marginer } from "../../components/marginer";
 import WatchList from "../../components/watchList";
@@ -20,8 +20,6 @@ const bag = <FontAwesomeIcon icon={faBriefcase} />
 const plus = <FontAwesomeIcon icon={faPlusSquare} />
 const search = <FontAwesomeIcon icon={faSearch} />
 const chart = <FontAwesomeIcon icon={faChartLine} />
-
-const symbol = 'AMZN'
 
 const TradePageContainer = styled.div`
     width: 100%;
@@ -184,20 +182,39 @@ const SubText = styled.h3`
     font-size: 12px;
 `;
 
-export function Trade(props) {
-    const { children } = props;
+class Trade extends Component {
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+            symbol : 'AAPL'
+        }
+    }
 
-    return ( 
-        <TradePageContainer>
-            {children}
-            <Marginer direction="vertical" margin={25} />
+    updateStock(e) {
+        e.preventDefault();
+        const {symbol} = this.state;
+        const newSymbol = this.newSymbol.value;
+
+        console.log(newSymbol)
+
+        this.setState({
+            symbol: this.state.newSymbol
+        })   
+
+        console.log(this.state.symbol)
+    }
+
+    render() {
+        const { symbol } = this.state;
+        return (
             <TradePageInnerContainer>
                 <MainColumn>
                     <CurrentStock>
                         <Marginer direction="horizontal" margin={25} />
                         <StockTitle>
                             <Marginer direction="vertical" margin={15}/>
-                            <StockHeaderText>{symbol}</StockHeaderText>
+                            <StockHeaderText>{this.state.symbol}</StockHeaderText>
                             <SubText>Add to Watchlist {plus}</SubText> 
                         </StockTitle>
                         <StockInfo>
@@ -238,24 +255,28 @@ export function Trade(props) {
                         <StockChart stockSymbol={symbol}/>
                     </GraphContainer>
                 </MainColumn>
-                <SideColumn>
-                    <SearchBar>
-                        {search}
-                        <Marginer direction="horizontal" margin={10} />
-                        <Input type="search" placeholder="Search"/>
-                    </SearchBar>
-                    <Marginer direction="vertical" margin={15} />
-                    <Positions>
-                        <Header>
-                            {bag}
+                    <SideColumn>
+                        <SearchBar>
+                        <form className="form-inline" onSubmit={(e) => {this.updateStock(e)}}>
+                            {search}
                             <Marginer direction="horizontal" margin={10} />
-                            <HeaderText>Positions</HeaderText>
-                        </Header>
-                    </Positions>
-                    <Marginer direction="vertical" margin={15} />
-                    <WatchList />
+                            <Input ref={(input) => {this.newSymbol = input}} type="text" placeholder="Search" className="form-control" id="newItemInput"/>
+                        </form>
+                        </SearchBar>
+                        <Marginer direction="vertical" margin={15} />
+                        <Positions>
+                            <Header>
+                                {bag}
+                                <Marginer direction="horizontal" margin={10} />
+                                <HeaderText>Positions</HeaderText>
+                            </Header>
+                        </Positions>
+                        <Marginer direction="vertical" margin={15} />
+                        <WatchList />
                 </SideColumn>
-            </TradePageInnerContainer>
-        </TradePageContainer>
-);
+            </TradePageInnerContainer>          
+        );
+    }
 }
+
+export default Trade;
