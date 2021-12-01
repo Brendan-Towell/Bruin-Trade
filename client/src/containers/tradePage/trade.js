@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Marginer } from "../../components/marginer";
+import WatchList from "../../components/watchList";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from "../../components/button";
 import StockChart from "../../components/stockChart";
@@ -45,15 +46,6 @@ const SideColumn = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
-`;
-
-const WatchList = styled.div`
-    width: 90%;
-    height: 44%;
-    outline-style: solid;
-    outline-width: thin;
-    outline-color: #E5E5E5;
-    background-color: #FFFFFF;
 `;
 
 const Positions = styled.div`
@@ -229,13 +221,7 @@ export function Trade(props) {
                         </Header>
                     </Positions>
                     <Marginer direction="vertical" margin={15} />
-                    <WatchList>
-                        <Header>
-                            {glasses}
-                            <Marginer direction="horizontal" margin={10} />
-                            <HeaderText>Watchlist</HeaderText>
-                        </Header>
-                    </WatchList>
+                    <WatchList />
                 </SideColumn>
             </TradePageInnerContainer>
         </TradePageContainer>
