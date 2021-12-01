@@ -2,14 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import { Marginer } from "../../components/marginer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button } from "../../components/button";
 import { AccountButton } from "../../components/dropdownButton"
-import { faGlasses, 
-         faWallet,
+import { faWallet,
          faBriefcase,
          faChartLine } from '@fortawesome/free-solid-svg-icons'
+import WatchList from "../../components/watchList";
 
-const glasses = <FontAwesomeIcon icon={faGlasses} />
 const wallet = <FontAwesomeIcon icon={faWallet} />
 const bag = <FontAwesomeIcon icon={faBriefcase} />
 const chart = <FontAwesomeIcon icon={faChartLine} />
@@ -64,36 +62,6 @@ const SummaryInfo = styled.div`
     height: 10%;
     justify-content: space-evenly;
     display: flex;
-`;  
-
-const WatchList = styled.div`
-    width: 86%;
-    height: 63%;
-    outline-style: solid;
-    outline-width: thin;
-    outline-color: #E5E5E5;
-    background-color: #FFFFFF;
-    display: flex;
-    flex-direction: column;
-    align: center;
-    padding-left: 15px;
-`;
-
-const InnerWatchList = styled.div`
-    width: 95%;
-    height: 99%;
-    display: flex;
-    align: center;
-    flex-direction: column;
-`;
-
-const WatchListCard= styled.div`
-    width: 100%;
-    height: 20%;
-    outline-style: solid;
-    outline-width: thin;
-    outline-color: #E5E5E5;
-    background-color: #FFFFFF;
 `;  
 
 const AccountHistory = styled.div`
@@ -161,26 +129,7 @@ export function User(props) {
                         </SummaryInfo>
                     </Summary>
                     <Marginer direction="vertical" margin={15} />
-                    <WatchList>
-                        <Header>
-                            {glasses}
-                            <Marginer direction="horizontal" margin={10} />
-                            <HeaderText>Watchlist</HeaderText>
-                        </Header>
-                        <InnerWatchList>
-                            <WatchListCard>
-                                AAPL
-                            </WatchListCard>
-                            <Marginer direction="vertical" margin={10} />
-                            <WatchListCard>
-                                AAPL
-                            </WatchListCard>
-                            <Marginer direction="vertical" margin={10} />
-                            <WatchListCard>
-                                AAPL
-                            </WatchListCard>
-                        </InnerWatchList>
-                    </WatchList>
+                    <WatchList />
                 </LeftColumn>
                 <CenterColumn>
                     <AccountHistory>
