@@ -10,7 +10,10 @@ import { faPlusSquare,
          faBriefcase,
          faSearch,
          faChartLine } from '@fortawesome/free-solid-svg-icons'
-import StockData from "../../components/stockData";
+
+import CurrentPrice from "../../components/stockData/currentPrice";
+import PercentChange from "../../components/stockData/percentChange";
+import PriceChange from "../../components/stockData/priceChange";
 
 const glasses = <FontAwesomeIcon icon={faGlasses} />
 const bag = <FontAwesomeIcon icon={faBriefcase} />
@@ -18,7 +21,7 @@ const plus = <FontAwesomeIcon icon={faPlusSquare} />
 const search = <FontAwesomeIcon icon={faSearch} />
 const chart = <FontAwesomeIcon icon={faChartLine} />
 
-const symbol = 'AAPL'
+const symbol = 'AMZN'
 
 const TradePageContainer = styled.div`
     width: 100%;
@@ -84,6 +87,22 @@ const StockTitle = styled.div`
     height: 100%;
     text-align: left;
     padding: 5px;
+`;
+
+const StockInfo = styled.div`
+    width: 30%;
+    height: 100%;
+    text-align: left;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+`;  
+
+const InfoLine = styled.div`
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
 `;
 
 const BuySell = styled.div`
@@ -181,7 +200,20 @@ export function Trade(props) {
                             <StockHeaderText>{symbol}</StockHeaderText>
                             <SubText>Add to Watchlist {plus}</SubText> 
                         </StockTitle>
-                        <StockData stockSymbol={symbol}/>
+                        <StockInfo>
+                            <InfoLine>
+                                <SubText>Current price:</SubText>
+                                <CurrentPrice stockSymbol={symbol}/>
+                            </InfoLine>
+                            <InfoLine>
+                                <SubText>Percent change:</SubText>
+                                <PercentChange stockSymbol={symbol}/>
+                            </InfoLine>
+                            <InfoLine>
+                                <SubText>Price change:</SubText>
+                                <PriceChange stockSymbol={symbol}/>
+                            </InfoLine>
+                        </StockInfo>
                         <BuySell>
                             <Marginer direction="vertical" margin={15} />
                             <Buy>

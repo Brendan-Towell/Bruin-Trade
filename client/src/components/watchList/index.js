@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGlasses,
          faSearch } from '@fortawesome/free-solid-svg-icons'
 import { red } from "@mui/material/colors";
+import CurrentPrice from "../stockData/currentPrice";
 
 const glasses = <FontAwesomeIcon icon={faGlasses} />
 const search = <FontAwesomeIcon icon={faSearch} />
@@ -76,7 +77,13 @@ const WatchListCard= styled.div`
     justify-content: space-evenly;
 `;  
 
-const Header = styled.h3`
+const WatchItemInfo = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+`;
+
+const Header = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -155,6 +162,9 @@ class WatchList extends Component {
                     return (
                         <WatchListCard>
                             <HeaderText>{symbol}</HeaderText>
+                            <WatchItemInfo>
+                                <CurrentPrice stockSymbol={symbol}/>
+                            </WatchItemInfo>
                             <button onClick={(e)=> this.removeSymbol(symbol)} type="button" color={red} width={50} height={10}>
                                 Remove
                             </button>
