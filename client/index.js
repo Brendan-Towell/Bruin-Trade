@@ -27,6 +27,12 @@ app.get('/insertuser', (req, res) => {
   let email = req.query.email;
   let pwd1 = req.query.pwd1;
   let pwd2 = req.query.pwd2;
+  
+  if(uname === "" || email === "" || pwd1 === "" || pwd2 === ""){
+    res.send({status:"all fields must be populated", token:-1});
+    return;
+  }
+
   if(pwd1 == pwd2){
     let user = {fullname:uname, email:email, password_hash:pwd1};
     let sql = `SELECT * FROM ${user_login_table} WHERE email = '${email}'`;
@@ -97,6 +103,11 @@ app.get('/getdata2', (req, res, next) => {
 app.get('/loginattempt', (req, res, next) => {
   let email = req.query.email;
   let pwd = req.query.password;
+
+  if(email === "" || pwd === ""){
+    res.send({status:"email or password is empty", token:-1});
+    return;
+  }
   
   // Check for username in user database
   let sql = `SELECT * FROM ${user_login_table} WHERE email = '${email}'`;

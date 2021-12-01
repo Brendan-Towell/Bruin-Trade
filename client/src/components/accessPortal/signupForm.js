@@ -22,6 +22,7 @@ export function SignupForm() {
       }
     });
     if(response.data.status !== "account created successfully"){
+      alert(response.data.status);
       document.getElementById("name").value = "";
       document.getElementById("email").value = "";
       document.getElementById("password1").value = "";

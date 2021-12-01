@@ -23,7 +23,7 @@ export function LoginForm() {
     });
     setValidation(response.data);
     if(response.data.status != "valid credentials"){
-      alert(response.data);
+      alert(response.data.status);
       document.getElementById("email").value = "";
       document.getElementById("password").value = "";
     }
