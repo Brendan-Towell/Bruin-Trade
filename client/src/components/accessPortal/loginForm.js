@@ -8,9 +8,30 @@ import {
 } from "./common";
 import { Marginer } from "../marginer";
 import { Link } from "react-router-dom";
+import {useState} from 'react';
 const { default: axios } = require('axios');
 
 export function LoginForm() {
+  const [validation, setValidation] = useState("default string");
+
+  const handleSubmit = async (event) => {
+    const response = await axios.get('http://localhost:8080/loginattempt',{
+      params: {
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value
+      }
+    });
+    setValidation(response.data);
+    if(response.data != "valid credentials"){
+      alert(response.data);
+      document.getElementById("email").value = "";
+      document.getElementById("password").value = "";
+    }
+    else{
+      window.location.href = '/home';
+    }
+  }
+
   return (
     <BoxContainer>
       <FormContainer>
@@ -20,12 +41,7 @@ export function LoginForm() {
       <Marginer direction="vertical" margin={10} />
       <MutedLink href="#">Forget your password?</MutedLink>
       <Marginer direction="vertical" margin="1.6em" />
-      <SubmitButton type="submit" onClick={async () => {await axios.get('http://localhost:8080/loginattempt',{
-      params: {
-        email: document.getElementById("email").value,
-        password: document.getElementById("password").value
-      }
-      })}}>Signup</SubmitButton>
+      <SubmitButton type="submit" onClick={handleSubmit}>Login</SubmitButton>
       <Marginer direction="vertical" margin="1em" />
       <MutedLink href="#">
         Don't have an account?{" "}

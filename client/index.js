@@ -29,16 +29,25 @@ app.get('/insertuser', (req, res) => {
   let pwd2 = req.query.pwd2;
   if(pwd1 == pwd2){
     let user = {fullname:uname, email:email, password_hash:pwd1};
-    let sql = `INSERT INTO ${user_login_table} SET ?`;
-    let query = db.query(sql, user, (err, result) => {
-        if (err) throw err;
-        console.log(result)
-        res.send("User created");
-      });
+    let sql = `SELECT * FROM ${user_login_table} WHERE email = '${email}'`;
+    let query = db.query(sql, (err, result) =>{
+      if (err) throw err;
+      if (result.length > 0){
+        res.send("error: email has already been used to register an account");
+        return;
+      }
+      else{
+        sql = `INSERT INTO ${user_login_table} SET ?`;
+        query = db.query(sql, user, (err, result) => {
+            if (err) throw err;
+            //console.log(result)
+            res.send("account created successfully");
+          });
+      }
+    });
   }
   else{
-    console.log("passwords don't match");
-    res.send("passwords don't match");
+    res.send("error: passwords don't match");
   }
 });
 
@@ -85,45 +94,24 @@ app.get('/getdata2', (req, res, next) => {
 app.get('/loginattempt', (req, res, next) => {
   let email = req.query.email;
   let pwd = req.query.password;
-  console.log('email: ' + email);
-  console.log('password: ' + pwd);
   
   // Check for username in user database
   let sql = `SELECT * FROM ${user_login_table} WHERE email = '${email}'`;
   let query = db.query(sql, (err, result) => {
       if(err) throw err;    //Throw error if received from query
 
-      if (result.length <= 0) {   //If username not in database, exit
-        res.send("email not found in database");
+      if (result.length <= 0) {   //If email not in database, exit
+        res.send("invalid credentials");
       }
       else{
         // If username and password match database entry, successful login
-        if(email == result[0].email && pwd == result[0].password_hash){  
-          console.log("VALID CREDENTIALS");
-          res.send("VALID CREDENTIALS");
+        if(email == result[0].email && pwd == result[0].password_hash){
+          res.send("valid credentials");
         }
         // Input password not match database entry therefore failed login
         else{
-          console.log("INVALID CREDENTIALS");
-          res.send("INVALID CREDENTIALS");
+          res.send("invalid credentials");
         }
       }
-      return;
     });
-
-})
-
-app.get('/testfunction',(req,res,next) =>{
-  console.log("successful testfunction call")
-  let uname = req.query.uname;
-  let email = req.query.email;
-  let pwd1 = req.query.pwd1;
-  let pwd2 = req.query.pwd2;
-  console.log("uname: " + uname);
-  console.log("email: " + email)
-  console.log("pwd1: " + pwd1);
-  console.log("pwd2: " + pwd2);
-  if(pwd1 != pwd2){
-    console.log("passwords do not match, registration invalid");
-  }
 })
