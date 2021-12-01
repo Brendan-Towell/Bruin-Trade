@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Marginer } from "../../components/marginer";
 import WatchList from "../../components/watchList";
+import SearchBar from "../../components/searchBar";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from "../../components/button";
 import StockChart from "../../components/stockChart";
@@ -106,16 +107,6 @@ const Sell = styled.div`
     display: flex;
 `;
 
-const SearchBar = styled.div`
-    width: 82%;
-    height: 2%;
-    padding: 10px; 
-    background-color: #FFFFFF;
-    display: flex;
-    justify-content: start;
-    flex-direction: row;
-`;
-
 const Input = styled.input`
   width: 85%;
   height: 25px;
@@ -207,11 +198,7 @@ export function Trade(props) {
                     </GraphContainer>
                 </MainColumn>
                 <SideColumn>
-                    <SearchBar>
-                        {search}
-                        <Marginer direction="horizontal" margin={10} />
-                        <Input type="search" placeholder="Search"/>
-                    </SearchBar>
+                    <SearchBar />
                     <Marginer direction="vertical" margin={15} />
                     <Positions>
                         <Header>
