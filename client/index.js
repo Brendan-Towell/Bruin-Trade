@@ -5,6 +5,7 @@ const app = express() // Call express as a function
 const { default: axios } = require('axios');
 const { extractEventHandlers } = require('@mui/base');
 const request = require('request');
+const { positions } = require('@mui/system');
 
 app.use(cors()) // Enable cors
 
@@ -159,6 +160,24 @@ app.get('/getUsersWatchlist', (req,res) => {
     res.send(stock_list);
   })
 }) 
+
+
+// Return all stocks on a specified users watchlist
+app.get('/getUsersPositions', (req,res) => {
+  let user_id = req.query.user_id;
+  let sql = `SELECT * FROM ${user_position_table} WHERE id = '${user_id}'`;
+  
+  let query = db.query(sql, (err, result) =>{
+    if (err) throw err;
+    let stock_list = []
+    for (var i = 0; i < result.length; i++) {
+      let symbol = result[i].stock_symbol;
+      stock_list.push(symbol);
+    }
+    res.send(stock_list);
+    return;
+  })
+})
 
 
 // Desposits a value into the users account in database
