@@ -16,6 +16,7 @@ import CurrentPrice from "../../components/stockData/currentPrice";
 import PercentChange from "../../components/stockData/percentChange";
 import PriceChange from "../../components/stockData/priceChange";
 import PositionList from "../../components/positionList";
+import axios from "axios";
 
 const plus = <FontAwesomeIcon icon={faPlusSquare} />
 const search = <FontAwesomeIcon icon={faSearch} />
@@ -198,10 +199,47 @@ class Trade extends Component {
                     : 'AMZN'    //Default value
         }
         this.updateStock = this.updateStock.bind(this);
+        this.buyStock = this.buyStock.bind(this);
+        this.sellStock = this.sellStock.bind(this);
+        this.sStock = this.sStock.bind(this);
     }
 
     updateStock(e) {
         this.setState((state) => {return {symbol: e}});
+    }
+
+    purchaseStock(e) {
+        e.preventDefault();
+        const {numShares, symbol} = this.state;
+        const newNumShares = this.numShares.value;
+        this.buyStock();
+    }
+
+    buyStock = async (event) =>{
+        const response = await axios.get('http://localhost:8080/buyStock', {
+            params:{
+                user_id: localStorage.getItem("token"),
+                stock_symbol: this.state.symbol,
+                amount:document.getElementById("buyShares").value
+            }
+        });
+    }
+        
+    sellStock(e) {
+        e.preventDefault();
+        const {numShares, symbol} = this.state;
+        const newNumShares = this.numShares.value;
+        this.sStock();
+    }
+
+    sStock = async (event) =>{
+        const response = await axios.get('http://localhost:8080/sellStock', {
+            params:{
+                user_id: localStorage.getItem("token"),
+                stock_symbol: this.state.symbol,
+                amount:document.getElementById("sellShares").value
+            }
+        });
     }
 
     render() {
@@ -234,15 +272,19 @@ class Trade extends Component {
                         <BuySell>
                             <Marginer direction="vertical" margin={15} />
                             <Buy>
-                                <Input type="search" placeholder="Shares"/>
-                                <Marginer direction="horizontal" margin={10} />
-                                <Button size={12} width={100} height={30}>Buy</Button>
-                            </Buy>
-                            <Sell>
-                                <Input type="search" placeholder="Price"/>
-                                <Marginer direction="horizontal" margin={10} />
-                                <Button size={12} width={100} height={30}>Sell</Button>
-                            </Sell>
+<Form className="form-inline" onSubmit={(e) => {this.purchaseStock(e)}}>
+<Input ref={(input) => {this.numShares = input}} type="text" placeholder="Shares to buy" className="form-control" id="buyShares"/>
+<Marginer direction="horizontal" margin={10} />
+<Button type="submit" size={12} width={75} height={25}>Buy</Button>
+</Form>
+</Buy>
+<Sell>
+<Form className="form-inline" onSubmit={(e) => {this.sellStock(e)}}>
+<Input ref={(input) => {this.numShares = input}} type="text" placeholder="Shares to sell" className="form-control" id="sellShares"/>
+<Marginer direction="horizontal" margin={10} />
+<Button type="submit" size={12} width={75} height={25}>Sell</Button>
+</Form>
+</Sell>
                         </BuySell>
                     </CurrentStock>
                     <Marginer direction="vertical" margin={15} />
