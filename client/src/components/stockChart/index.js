@@ -12,6 +12,15 @@ class StockChart extends React.Component {
         }
     }
 
+    componentWillReceiveProps(nextProp) {
+        this.setState({
+            stockSymbol: nextProp.stockSymbol
+        });
+
+        this.fetchStock();
+        this.render();
+    }
+
     componentDidMount() {
         this.fetchStock();
     }
