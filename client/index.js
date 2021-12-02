@@ -186,14 +186,8 @@ app.get('/getBalance', (req,res) => {
   let sql = `SELECT * FROM ${account_balance_table} WHERE user_id = '${user_id}'`;
   let query = db.query(sql, (err, result) => {
       if (err) throw err;
-
-      console.log(result);
-      let balance = result[0].account_balance;
-      console.log(`"The balance is: ${balance}"`);
-      
-      let string_balance = String(balance);
-      res.send({data:string_balance});
-      return;
+      console.log(result[0].account_balance);
+      res.send({balance_info:result[0].account_balance});
   })
   
 })

@@ -115,40 +115,22 @@ class User extends React.Component {
         this.state = {
             balance: 0
         }
-
-        //this.updateBalance = this.updateBalance.bind(this)
+        this.getBalance = this.getBalance.bind(this);
 
     }
-    
-    
-    fetchBalance(){
-        const getBal = async () => {
-            console.log("TESTING");
-            const response = await axios.get('http://localhost:8080/getBalance', {
-                params: {
-                    user_id: localStorage.getItem("token")
-                }
-            });
-            return response;
-        }
 
-        this.setState({balance: getBal})
-
-/*
-        console.log(resolved_response);
-
-        this.setState(
-        {
-            balance: resolved_response.data
-        })
-        return;
-*/
+    getBalance = async (event) =>{
+        const response = await axios.get('http://localhost:8080/getBalance', {
+            params:{
+                user_id: localStorage.getItem("token")
+            }
+        });
+        this.setState({balance:response.data.balance_info});
     }
-
 
     componentDidMount() {
         console.log("mounting...");
-        this.fetchBalance();
+        this.getBalance();
     }
 
     render() {

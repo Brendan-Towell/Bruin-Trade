@@ -119,7 +119,7 @@ class Deposit extends Component {
             .then((response) => {
                 console.log(response.status)
             })
-        window.location.reload();
+        window.location.href = '/home';
     }
 
 
