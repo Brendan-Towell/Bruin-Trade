@@ -1,9 +1,5 @@
-<<<<<<< Updated upstream
-import React from "react";
-=======
 import SelectInput from "@mui/material/Select/SelectInput";
 import React, { Component } from "react";
->>>>>>> Stashed changes
 import styled from "styled-components";
 import { Marginer } from "../../components/marginer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
