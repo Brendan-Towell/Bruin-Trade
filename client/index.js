@@ -4,6 +4,7 @@ const cors = require('cors') // Import cors
 const app = express() // Call express as a function
 const { default: axios } = require('axios');
 const { extractEventHandlers } = require('@mui/base');
+const request = require('request');
 
 app.use(cors()) // Enable cors
 
@@ -185,12 +186,42 @@ app.get('/getBuyingPower', (req,res) => {
   let sql = `SELECT * FROM ${account_balance_table} WHERE user_id = '${user_id}'`;
   let query = db.query(sql, (err, result) => {
       if (err) throw err;
-      console.log(result[0].account_balance);
       res.send({buying_power:result[0].account_balance});
   })
   
 })
 
+//Retrives a users total account value from database
+app.get('/getAccountValue', (req,res) =>{
+  let user_id = req.query.user_id;
+  var accountValue = 0;
+  let sql = `SELECT * FROM ${user_position_table} WHERE id = '${user_id}'`;
+  let query = db.query(sql, (err, result) => {
+    if (err) throw err;
+    for(let i = 0; i < result.length; i++){
+      var stockSymbol = result[i].stock_symbol;
+      var amount = result[i].amount;
+      const base = `https://sandbox.iexapis.com/stable/stock/${stockSymbol}`;
+      const endpath = '/quote';
+      const token = '?token=Tpk_1fa3ca794f3940949c492fee0615dcf5'
+      const url = base + endpath + token;
+      var value = 0;
+      request(url, {json:true},(err,jsonresult,body)=>{
+        if(err) throw err;
+        value = body.delayedPrice;
+        accountValue += amount*value;
+        if(i === result.length - 1){
+          sql = `SELECT * FROM ${account_balance_table} WHERE user_id = '${user_id}'`;
+          query = db.query(sql, (err, in_result) => {
+            if(err) throw err;
+            accountValue += in_result[0].cash_available;
+            res.send({account_value:accountValue});
+          })
+        }
+      })
+    }
+  })
+})
 
 
 app.listen(8080, (req, res) => { // Run a server

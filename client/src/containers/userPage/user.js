@@ -119,9 +119,11 @@ class User extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            buyingPower: 0
+            buyingPower: 0,
+            accountValue: 0
         }
         this.getBuyingPower = this.getBuyingPower.bind(this);
+        this.getAccountValue = this.getAccountValue.bind(this);
 
     }
     
@@ -139,9 +141,19 @@ class User extends Component {
         this.setState({buyingPower:response.data.buying_power});
     }
 
+    getAccountValue = async (event) =>{
+        const response = await axios.get('http://localhost:8080/getAccountValue', {
+            params:{
+                user_id: localStorage.getItem("token")
+            }
+        });
+        this.setState({accountValue:response.data.account_value});
+    }
+
     componentDidMount() {
         console.log("mounting...");
         this.getBuyingPower();
+        this.getAccountValue();
     }
 
     render() {
@@ -161,7 +173,7 @@ class User extends Component {
                         <Marginer direction="vertical" margin={15} />
                         <SummaryInfo>
                             <SubText>Account value</SubText>
-                            <SubText>$100</SubText>
+                            <SubText>${this.state.accountValue}</SubText>
                         </SummaryInfo>
                         <SummaryInfo>
                             <SubText>Buying power</SubText>
