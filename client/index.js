@@ -179,14 +179,24 @@ app.get('/deposit', (req,res) => {
 })
 
 
-
 //Retrieves a users account balance from database
+app.get('/getBalance', (req,res) => {
+  let user_id = req.query.user_id;
+  let sql = `SELECT * FROM ${account_balance_table} WHERE user_id = '${user_id}'`;
+  let query = db.query(sql, (err, result) => {
+      if (err) throw err;
+      res.send({account_balance:result[0].account_balance});
+  })
+  
+})
+
+//Retrieves a users buying power/available cash from database
 app.get('/getBuyingPower', (req,res) => {
   let user_id = req.query.user_id;
   let sql = `SELECT * FROM ${account_balance_table} WHERE user_id = '${user_id}'`;
   let query = db.query(sql, (err, result) => {
       if (err) throw err;
-      res.send({buying_power:result[0].account_balance});
+      res.send({buying_power:result[0].cash_available});
   })
   
 })

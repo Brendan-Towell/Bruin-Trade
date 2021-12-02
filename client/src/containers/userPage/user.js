@@ -124,6 +124,7 @@ class User extends Component {
         }
         this.getBuyingPower = this.getBuyingPower.bind(this);
         this.getAccountValue = this.getAccountValue.bind(this);
+        }
 
     }
     
@@ -131,6 +132,15 @@ class User extends Component {
         window.location.href = '/trade';
     }
     
+    getBalance = async (event) =>{
+        const response = await axios.get('http://localhost:8080/getBalance', {
+            params:{
+                user_id: localStorage.getItem("token")
+            }
+        });
+        this.setState({balance:response.data.account_balance});
+    }
+
 
     getBuyingPower = async (event) =>{
         const response = await axios.get('http://localhost:8080/getBuyingPower', {

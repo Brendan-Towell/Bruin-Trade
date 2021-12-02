@@ -195,14 +195,13 @@ class Trade extends Component {
             symbol : 
                 props.stockSymbol !== undefined
                     ? props.stockSymbol
-                    : 'AMZN'
+                    : 'AMZN'    //Default value
         }
         this.updateStock = this.updateStock.bind(this);
     }
 
     updateStock(e) {
         this.setState((state) => {return {symbol: e}});
-        //console.log(this.state.symbol);
     }
 
     render() {
