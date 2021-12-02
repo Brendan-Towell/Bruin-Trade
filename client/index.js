@@ -5,6 +5,8 @@ const app = express() // Call express as a function
 const { default: axios } = require('axios');
 const { extractEventHandlers } = require('@mui/base');
 const request = require('request');
+const { positions } = require('@mui/system');
+const { List } = require('@mui/material');
 
 app.use(cors()) // Enable cors
 
@@ -161,6 +163,24 @@ app.get('/getUsersWatchlist', (req,res) => {
 }) 
 
 
+// Return all stocks on a specified users watchlist
+app.get('/getUsersPositions', (req,res) => {
+  let user_id = req.query.user_id;
+  let sql = `SELECT * FROM ${user_position_table} WHERE id = '${user_id}'`;
+  
+  let query = db.query(sql, (err, result) =>{
+    if (err) throw err;
+    let stock_list = []
+    for (var i = 0; i < result.length; i++) {
+      let symbol = result[i].stock_symbol;
+      stock_list.push(symbol);
+    }
+    res.send(stock_list);
+    return;
+  })
+})
+
+
 // Desposits a value into the users account in database
 app.get('/deposit', (req,res) => {
   let user_id = req.query.user_id;
@@ -172,7 +192,7 @@ app.get('/deposit', (req,res) => {
   })
 
   //Add amount to total account value/balance
-  let sql = `UPDATE ${account_balance_table} SET account_balance = account_balance+${trans_amt} WHERE user_id = '${user_id}'`;
+  let sql = `UPDATE ${account_balance_table} SET cash_available = cash_available+${trans_amt} WHERE user_id = '${user_id}'`;
   let query = db.query(sql, (err, result) => {
     if (err) throw err;
   })
@@ -185,7 +205,7 @@ app.get('/getBalance', (req,res) => {
   let sql = `SELECT * FROM ${account_balance_table} WHERE user_id = '${user_id}'`;
   let query = db.query(sql, (err, result) => {
       if (err) throw err;
-      res.send({account_balance:result[0].account_balance});
+      res.send({account_balance:result[0].cash_available});
   })
   
 })
@@ -206,12 +226,50 @@ app.get('/getAccountValue', (req,res) =>{
   let user_id = req.query.user_id;
   var accountValue = 0;
   let sql = `SELECT * FROM ${user_position_table} WHERE id = '${user_id}'`;
+  let symbols = [];
+  var amounts = [];
+  var urls = [];
   let query = db.query(sql, (err, result) => {
     if (err) throw err;
     for(let i = 0; i < result.length; i++){
-      var stockSymbol = result[i].stock_symbol;
-      var amount = result[i].amount;
-      const base = `https://sandbox.iexapis.com/stable/stock/${stockSymbol}`;
+      symbols.push(result[i].stock_symbol);
+      amounts.push(result[i].amount);
+      const base = `https://sandbox.iexapis.com/stable/stock/${result[i].stock_symbol}`;
+      const endpath = '/quote';
+      const token = '?token=Tpk_1fa3ca794f3940949c492fee0615dcf5'
+      const url = base + endpath + token;
+      urls.push(url);
+      if(i === result.length - 1){
+        for(let j = 0; j < urls.length; j++){
+          request(urls[j], {json:true},(err,jsonresult,body)=>{
+            if(err) throw err;
+            let value = body.delayedPrice;
+            accountValue += amounts[j]*value;
+            if(j === result.length - 1){
+              sql = `SELECT * FROM ${account_balance_table} WHERE user_id = '${user_id}'`;
+              query = db.query(sql, (err, in_result) => {
+                if(err) throw err;
+                accountValue += in_result[0].cash_available;
+                res.send({account_value:accountValue});
+              })
+            }
+          })
+        }
+      }
+    }
+  })
+})
+
+//Attempts a purchase order
+app.get('/buyStock', (req,res) =>{
+  let user_id = req.query.user_id;
+  let stock_symbol = req.query.stock_symbol;
+  var amount = req.query.amount;
+  let sql = `SELECT * FROM ${account_balance_table} WHERE user_id = '${user_id}'`;
+  let query = db.query(sql, (err, result) => {
+    if (err) throw err;
+      var cashAvailable = result[0].cash_available;
+      const base = `https://sandbox.iexapis.com/stable/stock/${stock_symbol}`;
       const endpath = '/quote';
       const token = '?token=Tpk_1fa3ca794f3940949c492fee0615dcf5'
       const url = base + endpath + token;
@@ -219,17 +277,94 @@ app.get('/getAccountValue', (req,res) =>{
       request(url, {json:true},(err,jsonresult,body)=>{
         if(err) throw err;
         value = body.delayedPrice;
-        accountValue += amount*value;
-        if(i === result.length - 1){
-          sql = `SELECT * FROM ${account_balance_table} WHERE user_id = '${user_id}'`;
-          query = db.query(sql, (err, in_result) => {
+        if(cashAvailable < amount*value){
+          return;
+        }
+        else{
+          sql = `UPDATE ${account_balance_table} SET cash_available = cash_available-${amount*value} WHERE user_id = '${user_id}'`;
+          query = db.query(sql, (err, result) => {
             if(err) throw err;
-            accountValue += in_result[0].cash_available;
-            res.send({account_value:accountValue});
+            sql = `SELECT * FROM ${user_position_table} WHERE id = '${user_id}' AND stock_symbol = '${stock_symbol}'`;
+            query = db.query(sql, (err, result) =>{
+            if (err) throw err;
+            if (result.length > 0){
+              let add_query = `UPDATE ${user_position_table} SET amount = amount+${amount} WHERE id = '${user_id}' AND stock_symbol = '${stock_symbol}'`;
+              query = db.query(add_query, (err, result) => {
+                if (err) throw err;
+                return;
+              })
+            }
+            else {
+              let insert_query = `INSERT INTO ${user_position_table} (id, stock_symbol, amount) VALUES ('${user_id}', '${stock_symbol}', '${amount}')`;
+              query = db.query(insert_query, (err, result) => {
+                if (err) throw err;
+                return;
+              })
+            }
           })
+          })
+          
         }
       })
+  })
+})
+
+//Attempts a sell order
+app.get('/sellStock', (req,res) =>{
+  let user_id = req.query.user_id;
+  let stock_symbol = req.query.stock_symbol;
+  var amount = req.query.amount;
+  let sql = `SELECT * FROM ${user_position_table} WHERE id = '${user_id}' and stock_symbol = '${stock_symbol}'`;
+  let query = db.query(sql, (err, result) => {
+    if (err) throw err;
+    if(result.length <= 0){
+      return;
     }
+    var amountAvailable = result[0].amount;
+    if(amountAvailable < amount){
+      return;
+    }
+      
+      
+      const base = `https://sandbox.iexapis.com/stable/stock/${stock_symbol}`;
+      const endpath = '/quote';
+      const token = '?token=Tpk_1fa3ca794f3940949c492fee0615dcf5'
+      const url = base + endpath + token;
+      var value = 0;
+      request(url, {json:true},(err,jsonresult,body)=>{
+        if(err) throw err;
+        value = body.delayedPrice;
+        sql = `UPDATE ${account_balance_table} SET cash_available = cash_available+${amount*value} WHERE user_id = '${user_id}'`;
+        query = db.query(sql, (err, result) => {
+          if(err) throw err;
+          sql = `SELECT * FROM ${user_position_table} WHERE id = '${user_id}' AND stock_symbol = '${stock_symbol}'`;
+          query = db.query(sql, (err, result) =>{
+          if (err) throw err;
+          if (result.length > 0){
+            if(amountAvailable != amount){
+              let sell_query = `UPDATE ${user_position_table} SET amount = amount-${amount} WHERE id = '${user_id}' AND stock_symbol = '${stock_symbol}'`;
+              query = db.query(sell_query, (err, result) => {
+                if (err) throw err;
+                return;
+              })
+            }
+            else{
+              let delete_query = `DELETE FROM ${user_position_table} WHERE id = '${user_id}' and stock_symbol = '${stock_symbol}'`;
+              console.log("delte called");
+              query = db.query(delete_query, (err, result) => {
+                if(err) throw err;
+                return;
+              })
+            }
+            
+            
+          }
+          else {
+            return;
+            }
+          })
+        })
+      })
   })
 })
 

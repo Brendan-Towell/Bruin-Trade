@@ -7,6 +7,7 @@ import { faBriefcase } from '@fortawesome/free-solid-svg-icons'
 import { red } from "@mui/material/colors";
 import CurrentPrice from "../stockData/currentPrice";
 import PercentChange from "../stockData/percentChange";
+import axios from "axios";
 
 const bag = <FontAwesomeIcon icon={faBriefcase} />
 
@@ -95,9 +96,22 @@ class PositionList extends Component {
         super(props);
         this.updateStock = props.updateStock;
         this.state = {
-            stockSymbols : ['F', 'AMC', 'MSFT', 'SNDL', 'NIO'],
+            stockSymbols : [],
             message: ''
         }
+    }
+
+    componentDidMount() {
+        const response = axios.get('http://localhost:8080/getUsersPositions',{
+            params: {
+                user_id: localStorage.getItem("token")
+            }
+        })
+            .then((response) => {
+                this.setState({
+                    stockSymbols: response.data
+                })
+            })
     }
 
     render() {
@@ -128,9 +142,6 @@ class PositionList extends Component {
                                 <InfoLine>
                                     <SubText>PercentChange:</SubText>
                                     <PercentChange stockSymbol={symbol}/>
-                                </InfoLine>
-                                <InfoLine>
-                                    <SubText>Shares Held:</SubText>
                                 </InfoLine>
                             </PositionItemInfo>
                             <TradeButton>
