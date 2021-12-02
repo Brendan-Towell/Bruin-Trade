@@ -3,6 +3,7 @@ const mysql = require('mysql') //Import mysql
 const cors = require('cors') // Import cors
 const app = express() // Call express as a function
 const { default: axios } = require('axios');
+const { extractEventHandlers } = require('@mui/base');
 
 app.use(cors()) // Enable cors
 
@@ -21,7 +22,7 @@ db.connect((err) => {
 // Name of table for user login credentials in database
 const user_login_table = 'user_login_info';
 const user_watchlists_table = 'user_watchlists';
-
+const account_balance_table = 'account_financial_data';
 
 //Create entry for user in table
 app.get('/insertuser', (req, res) => {
@@ -49,11 +50,22 @@ app.get('/insertuser', (req, res) => {
         query = db.query(sql, user, (err, result) => {
             if (err) throw err;
         });
+        
+        let current_id = 0;
         sql = `SELECT * FROM ${user_login_table} WHERE email = '${email}'`;
         query = db.query(sql, (err, result) => {
           if (err) throw err;
           res.send({status:"account created successfully",token:result[0].id});
+          current_id = result[0].id;
         });
+        
+        sql = `INSERT INTO ${account_financial_data} SET ?`;
+        let user_financial = {user_id: current_id, account_balance: 0, cash_available: 0}
+        query = db.query(sql, user_financial, (err, result) => {
+          if (err) throw err;
+          res.send({status:"account financials initialized"})
+        })
+
       }
     });
   }
@@ -88,8 +100,9 @@ app.get('/deleteUser', (req, res) => {
 
 // Add stock to a users watchlist
 app.get('/addStockToWatchlist', (req,res) => {
-  let stock_symbol = req.params.stock_symbol;
-  let user_id = req.params.id;
+  let stock_symbol = req.query.stock_symbol;
+  let user_id = req.query.user_id;
+  // Check if stock already on watchlist
   let sql = `SELECT * FROM ${user_watchlists_table} WHERE user_id = '${user_id}' AND stock_symbol = '${stock_symbol}'`;
   let query = db.query(sql, (err, result) =>{
     if (err) throw err;
@@ -108,8 +121,9 @@ app.get('/addStockToWatchlist', (req,res) => {
 
 // Remove stock from a users watchlist
 app.get('/removeStockFromWatchlist', (req,res) => {
-  let stock_symbol = req.params.stock_symbol;
-  let user_id = req.params.id;
+  let stock_symbol = req.query.stock_symbol;
+  let user_id = req.query.user_id;
+  // Make sure stock on watchlist before removing
   let sql = `SELECT * FROM ${user_watchlists_table} WHERE user_id = '${user_id}' AND stock_symbol = '${stock_symbol}'`;
   let query = db.query(sql, (err, result) =>{
     if (err) throw err;
@@ -127,18 +141,64 @@ app.get('/removeStockFromWatchlist', (req,res) => {
 })
 
 
+
+// Return all stocks on a specified users watchlist
+app.get('/getUsersWatchlist', (req,res) => {
+  let user_id = req.query.user_id;
+  let sql = `SELECT * FROM ${user_watchlists_table} WHERE user_id = '${user_id}'`;
+  
+  let query = db.query(sql, (err, result) =>{
+    if (err) throw err;
+    let stock_list = []
+    for (var i = 0; i < result.length; i++) {
+      let symbol = result[i].stock_symbol;
+      stock_list.push(symbol);
+    }
+    res.send(stock_list);
+  })
+}) 
+
+
+// Desposits a value into the users account in database
+app.get('/deposit', (req,res) => {
+  let user_id = req.query.user_id;
+  let trans_amt = req.query.deposit_amount;
+  //Add amount to cash available since all deposits are cash
+  let cash_sql = `UPDATE ${account_balance_table} SET cash_available = cash_available+${trans_amt} WHERE user_id = '${user_id}'`;
+  let cash_query = db.query(cash_sql, (err, result) => {
+    if (err) throw err;
+  })
+
+  //Add amount to total account value/balance
+  let sql = `UPDATE ${account_balance_table} SET account_balance = account_balance+${trans_amt} WHERE user_id = '${user_id}'`;
+  let query = db.query(sql, (err, result) => {
+    if (err) throw err;
+  })
+})
+
+
+
+//Retrieves a users account balance from database
+app.get('/getBalance', (req,res) => {
+  let user_id = req.query.user_id;
+  console.log(user_id)
+  console.log("TEST")
+  let sql = `SELECT * FROM ${account_balance_table} WHERE user_id = '${user_id}'`;
+  let query = db.query(sql, (err, result) => {
+      if (err) throw err;
+      console.log(result[0].account_balance);
+      res.send({balance_info:result[0].account_balance});
+  })
+  
+})
+
+
+
 app.listen(8080, (req, res) => { // Run a server
   console.log("SERVER IS RUNNING ON 8080");
 })
 
-app.get('/getdata1', (req, res, next) => {
-  res.send("HELLO FROM SERVER")
-})
 
-app.get('/getdata2', (req, res, next) => {
-  console.log("getdata2");
-  res.send("GOOD NIGHT FROM SERVER");
-})
 
 // Server processing login attempt from client
 app.get('/loginattempt', (req, res, next) => {
