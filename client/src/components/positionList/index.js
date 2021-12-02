@@ -62,6 +62,13 @@ const TradeButton = styled.div`
     justify-content: center;
 `;
 
+const InfoLine = styled.div`
+    padding: 1px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+`;
+
 const Header = styled.div`
     display: flex;
     flex-direction: row;
@@ -86,14 +93,11 @@ class PositionList extends Component {
     
     constructor(props) {
         super(props);
+        this.updateStock = props.updateStock;
         this.state = {
             stockSymbols : ['F', 'AMC', 'MSFT', 'SNDL', 'NIO'],
             message: ''
         }
-    }
-
-    tradeStock(symbol) {
-       
     }
 
     render() {
@@ -121,12 +125,16 @@ class PositionList extends Component {
                                 <HeaderText>{symbol}</HeaderText>
                             </PositionTitle>
                             <PositionItemInfo>
-                                <SubText>PercentChange:</SubText>
-                                <PercentChange stockSymbol={symbol}/>
-                                <SubText>Shares Held:</SubText>
+                                <InfoLine>
+                                    <SubText>PercentChange:</SubText>
+                                    <PercentChange stockSymbol={symbol}/>
+                                </InfoLine>
+                                <InfoLine>
+                                    <SubText>Shares Held:</SubText>
+                                </InfoLine>
                             </PositionItemInfo>
                             <TradeButton>
-                                <div onClick={(e)=> this.tradeStock(symbol)}>
+                                <div onClick={(e)=> this.updateStock(symbol)}>
                                     <Button type="button" size={12} width={75} height={40}>
                                         Trade
                                     </Button>
