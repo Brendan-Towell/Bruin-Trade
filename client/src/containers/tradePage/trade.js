@@ -206,7 +206,6 @@ class Trade extends Component {
     }
 
     render() {
-        console.log('render');
         const { symbol } = this.state;
         return (
             <TradePageInnerContainer>
@@ -261,7 +260,7 @@ class Trade extends Component {
                         <SearchBar updateStock = {this.updateStock}/>
                         <Marginer direction="vertical" margin={25} />
                         <Positions>
-                            <PositionList/>
+                            <PositionList updateStock = {this.updateStock}/>
                         </Positions>
                         <Marginer direction="vertical" margin={15} />
                         <WatchContainer>

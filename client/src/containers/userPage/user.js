@@ -1,4 +1,9 @@
+<<<<<<< Updated upstream
 import React from "react";
+=======
+import SelectInput from "@mui/material/Select/SelectInput";
+import React, { Component } from "react";
+>>>>>>> Stashed changes
 import styled from "styled-components";
 import { Marginer } from "../../components/marginer";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -112,11 +117,18 @@ const WatchContainer = styled.div`
     display: flex;
     align: center;
 `;
-export function User(props) {
-    const { children } = props;
+
+class User extends Component {
+    
+    updateStock(e) {
+        window.location.href = '/trade';
+    }
+
+
+    render() {
+
     return (
         <UserPageContainer>
-            {children}
             <Marginer direction="vertical" margin={25} />
             <UserPageInnerContainer>
                 <LeftColumn>
@@ -154,10 +166,13 @@ export function User(props) {
                 </CenterColumn>
                 <RightColumn>
                     <Positions>
-                        <PositionList />
+                        <PositionList updateStock = {this.updateStock}/>
                     </Positions>
                 </RightColumn>
             </UserPageInnerContainer>
         </UserPageContainer>
-    );
+        );
+    }
 }
+
+export default User;
