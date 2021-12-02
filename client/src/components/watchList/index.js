@@ -6,13 +6,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGlasses,
          faSearch } from '@fortawesome/free-solid-svg-icons'
 import { red } from "@mui/material/colors";
+import CurrentPrice from "../stockData/currentPrice";
 
 const glasses = <FontAwesomeIcon icon={faGlasses} />
 const search = <FontAwesomeIcon icon={faSearch} />
 
 const WatchListContainer = styled.div`
-    width: 86%;
-    height: 63%;
+    width: 100%;
+    height: 100%;
     outline-style: solid;
     outline-width: thin;
     outline-color: #E5E5E5;
@@ -76,7 +77,25 @@ const WatchListCard= styled.div`
     justify-content: space-evenly;
 `;  
 
-const Header = styled.h3`
+const WatchTitle = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+`;
+
+const WatchItemInfo = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+`;
+
+const WatchButton = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+`;
+
+const Header = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -89,6 +108,17 @@ const HeaderText = styled.h3`
     font-size: 15px;
 `;
 
+const SubText = styled.h3`
+    margin: 0;
+    line-height: 1.4;
+    font-weight: 500;
+    font-size: 12px;
+`;
+
+const Form = styled.form`
+    display: flex;
+    flex-direction: row;
+`;
 class WatchList extends Component {
     
     constructor(props) {
@@ -139,11 +169,13 @@ class WatchList extends Component {
         const { stockSymbols, message } = this.state;
         return (
         <WatchListContainer>
+            <Marginer direction="vertical" margin={20} />
             <Header>
                 {glasses}
                 <Marginer direction="horizontal" margin={10} />
                 <HeaderText>Watchlist</HeaderText>
             </Header>
+            <Marginer direction="vertical" margin={15} />
             <InnerWatchListContainer>
             {
                 (message !== '' || stockSymbols.length === 0 )&& <p className="message text-danger">{message}</p>
@@ -154,10 +186,21 @@ class WatchList extends Component {
                 {stockSymbols.map((symbol)=>{
                     return (
                         <WatchListCard>
-                            <HeaderText>{symbol}</HeaderText>
-                            <button onClick={(e)=> this.removeSymbol(symbol)} type="button" color={red} width={50} height={10}>
-                                Remove
-                            </button>
+                            <WatchTitle>
+                                <HeaderText>{symbol}</HeaderText>
+                            </WatchTitle>
+                            <WatchItemInfo>
+                                <SubText>Current price:</SubText>
+                                <CurrentPrice stockSymbol={symbol}/>
+                            </WatchItemInfo>
+                            <WatchButton>
+                                <div onClick={(e)=> this.removeSymbol(symbol)}>
+                                    <Button type="button" size={12} width={75} height={40}>
+                                        Remove
+                                    </Button>
+                                </div>
+                            </WatchButton>
+                            <Marginer direction="vertical" margin={15} />
                         </WatchListCard>
                     );
                 })}
@@ -167,11 +210,11 @@ class WatchList extends Component {
                 <SearchBar>
                     {search}
                     <Marginer direction="horizontal" margin={10} />
-                    <form className="form-inline" onSubmit={(e) => {this.addItem(e)}}>
+                    <Form className="form-inline" onSubmit={(e) => {this.addItem(e)}}>
                         <Input ref={(input) => {this.newSymbol = input}} type="text" placeholder="Search" className="form-control" id="newItemInput"/>
                         <Marginer direction="horizontal" margin={10} />
                         <Button type="submit" size={12} width={75} height={25}>Add</Button>
-                    </form>
+                    </Form>
                 </SearchBar>
             </InnerWatchListContainer>
         </WatchListContainer>

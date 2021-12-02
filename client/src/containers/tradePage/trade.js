@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, Component } from "react";
 import styled from "styled-components";
 import { Marginer } from "../../components/marginer";
+import SearchBar from "../../components/searchBar";
 import WatchList from "../../components/watchList";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from "../../components/button";
@@ -10,15 +11,15 @@ import { faPlusSquare,
          faBriefcase,
          faSearch,
          faChartLine } from '@fortawesome/free-solid-svg-icons'
-import StockData from "../../components/stockData";
 
-const glasses = <FontAwesomeIcon icon={faGlasses} />
-const bag = <FontAwesomeIcon icon={faBriefcase} />
+import CurrentPrice from "../../components/stockData/currentPrice";
+import PercentChange from "../../components/stockData/percentChange";
+import PriceChange from "../../components/stockData/priceChange";
+import PositionList from "../../components/positionList";
+
 const plus = <FontAwesomeIcon icon={faPlusSquare} />
 const search = <FontAwesomeIcon icon={faSearch} />
 const chart = <FontAwesomeIcon icon={faChartLine} />
-
-const symbol = 'AAPL'
 
 const TradePageContainer = styled.div`
     width: 100%;
@@ -50,9 +51,11 @@ const SideColumn = styled.div`
 
 const Positions = styled.div`
     width: 90%;
-    height: 44%;
+    height: 40%;
     outline-style: solid;
     outline-width: thin;
+    display: flex;
+    align-items: center;
     outline-color: #E5E5E5;
     background-color: #FFFFFF;
 `;
@@ -86,6 +89,22 @@ const StockTitle = styled.div`
     padding: 5px;
 `;
 
+const StockInfo = styled.div`
+    width: 30%;
+    height: 100%;
+    text-align: left;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+`;  
+
+const InfoLine = styled.div`
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+`;
+
 const BuySell = styled.div`
     width: 30%;
     height: 100%;
@@ -106,36 +125,32 @@ const Sell = styled.div`
     display: flex;
 `;
 
-const SearchBar = styled.div`
-    width: 82%;
-    height: 2%;
-    padding: 10px; 
-    background-color: #FFFFFF;
+const Form = styled.form`
     display: flex;
-    justify-content: start;
     flex-direction: row;
+    width: 95%;
 `;
 
 const Input = styled.input`
-  width: 85%;
-  height: 25px;
-  outline: solid;
-  outline-width: thin;
-  outline-color: rgba(200, 200, 200, 0.3);
-  border: 1px solid rgba(200, 200, 200, 0.3);
-  padding: 0px 10px;
-  border-bottom: 1.4px solid transparent;
-  font-size: 12px;
-  &::placeholder {
-    color: rgba(200, 200, 200, 1);
-  }
-  &:not(:last-of-type) {
-    border-bottom: 1.5px solid rgba(200, 200, 200, 0.4);
-  }
-  &:focus {
-    outline: none;
-    border-bottom: 2px solid rgb(241, 196, 15);
-  }
+width: 95%;
+height: 25px;
+outline: solid;
+outline-width: thin;
+outline-color: rgba(200, 200, 200, 0.3);
+border: 1px solid rgba(200, 200, 200, 0.3);
+padding: 0px 10px;
+border-bottom: 1.4px solid transparent;
+font-size: 12px;
+&::placeholder {
+  color: rgba(200, 200, 200, 1);
+}
+&:not(:last-of-type) {
+  border-bottom: 1.5px solid rgba(200, 200, 200, 0.4);
+}
+&:focus {
+  outline: none;
+  border-bottom: 2px solid rgb(241, 196, 15);
+}
 `;
 
 const Header = styled.h3`
@@ -165,23 +180,59 @@ const SubText = styled.h3`
     font-size: 12px;
 `;
 
-export function Trade(props) {
-    const { children } = props;
+const WatchContainer = styled.div`
+    height: 46%;
+    width:90%;
+    display: flex;
+    align: center;
+`;
 
-    return ( 
-        <TradePageContainer>
-            {children}
-            <Marginer direction="vertical" margin={25} />
+class Trade extends Component {
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+            symbol : 
+                props.stockSymbol !== undefined
+                    ? props.stockSymbol
+                    : 'AMZN'
+        }
+        this.updateStock = this.updateStock.bind(this);
+    }
+
+    updateStock(e) {
+        this.setState((state) => {return {symbol: e}});
+        //console.log(this.state.symbol);
+    }
+
+    render() {
+        console.log('render');
+        const { symbol } = this.state;
+        return (
             <TradePageInnerContainer>
                 <MainColumn>
                     <CurrentStock>
                         <Marginer direction="horizontal" margin={25} />
                         <StockTitle>
                             <Marginer direction="vertical" margin={15}/>
-                            <StockHeaderText>{symbol}</StockHeaderText>
+                            <StockHeaderText>{this.state.symbol}</StockHeaderText>
                             <SubText>Add to Watchlist {plus}</SubText> 
                         </StockTitle>
-                        <StockData stockSymbol={symbol}/>
+                        <StockInfo>
+                            <InfoLine>
+                            {console.log(symbol)}
+                                <SubText>Current price:</SubText>
+                                <CurrentPrice stockSymbol={symbol}/>
+                            </InfoLine>
+                            <InfoLine>
+                                <SubText>Percent change:</SubText>
+                                <PercentChange stockSymbol={symbol}/>
+                            </InfoLine>
+                            <InfoLine>
+                                <SubText>Price change:</SubText>
+                                <PriceChange stockSymbol={symbol}/>
+                            </InfoLine>
+                        </StockInfo>
                         <BuySell>
                             <Marginer direction="vertical" margin={15} />
                             <Buy>
@@ -206,24 +257,20 @@ export function Trade(props) {
                         <StockChart stockSymbol={symbol}/>
                     </GraphContainer>
                 </MainColumn>
-                <SideColumn>
-                    <SearchBar>
-                        {search}
-                        <Marginer direction="horizontal" margin={10} />
-                        <Input type="search" placeholder="Search"/>
-                    </SearchBar>
-                    <Marginer direction="vertical" margin={15} />
-                    <Positions>
-                        <Header>
-                            {bag}
-                            <Marginer direction="horizontal" margin={10} />
-                            <HeaderText>Positions</HeaderText>
-                        </Header>
-                    </Positions>
-                    <Marginer direction="vertical" margin={15} />
-                    <WatchList />
+                    <SideColumn>
+                        <SearchBar updateStock = {this.updateStock}/>
+                        <Marginer direction="vertical" margin={25} />
+                        <Positions>
+                            <PositionList/>
+                        </Positions>
+                        <Marginer direction="vertical" margin={15} />
+                        <WatchContainer>
+                            <WatchList />
+                        </WatchContainer>
                 </SideColumn>
-            </TradePageInnerContainer>
-        </TradePageContainer>
-);
+            </TradePageInnerContainer>          
+        );
+    }
 }
+
+export default Trade;
