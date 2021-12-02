@@ -7,7 +7,7 @@ to "./Bruin-Trade/client/src/components/homePage"
 
 Open up the terminal, change the directory to client of the repository (./Bruin-Trade/client).
 To install the icons, use the command:
-npm install --save @fortawesome/fontawesome-free
+`npm install --save @fortawesome/fontawesome-free`
 Don't close the terminal yet, we will use it shortly.
 
 
@@ -23,7 +23,7 @@ please refer to https://dev.mysql.com/doc/refman/8.0/en/installing.html)
 
 
 Now go back to the terminal. Inside the "client" directory of the repository, type the command:
-node index.js
+`node index.js`
 This should prompt messages as:
 '''
 SERVER IS RUNNING ON 8080
@@ -33,5 +33,5 @@ Database connected...
 
 Finally, open a new terminal and go to the same directory as before (./Bruin-Trade/client). 
 Type the command:
-npm start
+`npm start`
 which will open your default browser with a new window of the running app!
