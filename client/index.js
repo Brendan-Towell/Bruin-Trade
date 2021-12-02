@@ -23,6 +23,7 @@ db.connect((err) => {
 const user_login_table = 'user_login_info';
 const user_watchlists_table = 'user_watchlists';
 const account_balance_table = 'account_financial_data';
+const user_position_table = 'user_positions';
 
 //Create entry for user in table
 app.get('/insertuser', (req, res) => {
@@ -179,15 +180,13 @@ app.get('/deposit', (req,res) => {
 
 
 //Retrieves a users account balance from database
-app.get('/getBalance', (req,res) => {
+app.get('/getBuyingPower', (req,res) => {
   let user_id = req.query.user_id;
-  console.log(user_id)
-  console.log("TEST")
   let sql = `SELECT * FROM ${account_balance_table} WHERE user_id = '${user_id}'`;
   let query = db.query(sql, (err, result) => {
       if (err) throw err;
       console.log(result[0].account_balance);
-      res.send({balance_info:result[0].account_balance});
+      res.send({buying_power:result[0].account_balance});
   })
   
 })

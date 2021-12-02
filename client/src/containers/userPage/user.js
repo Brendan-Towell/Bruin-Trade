@@ -10,6 +10,7 @@ import { faWallet,
 import WatchList from "../../components/watchList";
 import AccountChart from "../../components/accountChart";
 import PositionList from "../../components/positionList";
+import axios from "axios";
 
 const wallet = <FontAwesomeIcon icon={faWallet} />
 const bag = <FontAwesomeIcon icon={faBriefcase} />
@@ -115,11 +116,33 @@ const WatchContainer = styled.div`
 `;
 
 class User extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            buyingPower: 0
+        }
+        this.getBuyingPower = this.getBuyingPower.bind(this);
+
+    }
     
     updateStock(e) {
         window.location.href = '/trade';
     }
+    
 
+    getBuyingPower = async (event) =>{
+        const response = await axios.get('http://localhost:8080/getBuyingPower', {
+            params:{
+                user_id: localStorage.getItem("token")
+            }
+        });
+        this.setState({buyingPower:response.data.buying_power});
+    }
+
+    componentDidMount() {
+        console.log("mounting...");
+        this.getBuyingPower();
+    }
 
     render() {
 
@@ -142,7 +165,7 @@ class User extends Component {
                         </SummaryInfo>
                         <SummaryInfo>
                             <SubText>Buying power</SubText>
-                            <SubText>$500</SubText>
+                            <SubText>${this.state.buyingPower}</SubText>
                         </SummaryInfo>
                     </Summary>
                     <Marginer direction="vertical" margin={15} />
