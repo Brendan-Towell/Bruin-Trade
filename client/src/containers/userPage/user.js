@@ -124,8 +124,6 @@ class User extends Component {
         }
         this.getBuyingPower = this.getBuyingPower.bind(this);
         this.getAccountValue = this.getAccountValue.bind(this);
-        }
-
     }
     
     updateStock(e) {
