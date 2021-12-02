@@ -31,6 +31,20 @@ class PercentChange extends React.Component {
         }
     }
 
+    componentWillReceiveProps(nextProp) {
+        this.setState({
+            stock: nextProp.stockSymbol
+        });
+    }
+
+    async componentDidUpdate() {
+        const base = `https://sandbox.iexapis.com/stable/stock/${this.state.stock}`;
+        const endpath = '/quote';
+        const token = '?token=Tpk_1fa3ca794f3940949c492fee0615dcf5'
+        const url = base + endpath + token;
+        setTimeout(async () => {await fetch(url).then((response) => response.json()).then((data) => this.setState({quote: data}))}, 2500);
+    }
+
     async componentDidMount() {
         const base = `https://sandbox.iexapis.com/stable/stock/${this.state.stock}`;
         const endpath = '/quote';

@@ -96,7 +96,12 @@ class SearchBar extends Component {
                     <Result>
                         {this.state.result.map((res) => {
                             return (
-                                <ResultItem onClick={() => {this.updateStock(res.symbol)}}>
+                                <ResultItem onClick={() => {
+                                    this.updateStock(res.symbol);
+                                    this.setState({
+                                        word: ''
+                                    });
+                                    }}>
                                     {res.exchange}: {res.symbol}
                                 </ResultItem>
                             )

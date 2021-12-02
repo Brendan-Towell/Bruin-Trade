@@ -202,10 +202,11 @@ class Trade extends Component {
 
     updateStock(e) {
         this.setState((state) => {return {symbol: e}});
-        console.log(this.state.symbol);
+        //console.log(this.state.symbol);
     }
 
     render() {
+        console.log('render');
         const { symbol } = this.state;
         return (
             <TradePageInnerContainer>
@@ -219,6 +220,7 @@ class Trade extends Component {
                         </StockTitle>
                         <StockInfo>
                             <InfoLine>
+                            {console.log(symbol)}
                                 <SubText>Current price:</SubText>
                                 <CurrentPrice stockSymbol={symbol}/>
                             </InfoLine>
