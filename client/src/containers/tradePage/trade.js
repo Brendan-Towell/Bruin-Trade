@@ -213,6 +213,7 @@ class Trade extends Component {
         const {numShares, symbol} = this.state;
         const newNumShares = this.numShares.value;
         this.buyStock();
+        window.location.reload();
     }
 
     buyStock = async (event) =>{
@@ -230,6 +231,7 @@ class Trade extends Component {
         const {numShares, symbol} = this.state;
         const newNumShares = this.numShares.value;
         this.sStock();
+        window.location.reload();
     }
 
     sStock = async (event) =>{
