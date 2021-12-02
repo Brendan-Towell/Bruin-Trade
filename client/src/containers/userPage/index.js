@@ -1,6 +1,6 @@
 import React from "react";
 import { PageContainer } from "../../components/pageContainer";
-import { User } from "./user";
+import User from "./user";
 import { Userbar } from "../../components/userbar";
 
 export function UserPage(props) {

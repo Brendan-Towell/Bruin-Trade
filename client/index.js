@@ -159,26 +159,43 @@ app.get('/getUsersWatchlist', (req,res) => {
 }) 
 
 
-
+// Desposits a value into the users account in database
 app.get('/deposit', (req,res) => {
   let user_id = req.query.user_id;
   let trans_amt = req.query.deposit_amount;
-
   //Add amount to cash available since all deposits are cash
   let cash_sql = `UPDATE ${account_balance_table} SET cash_available = cash_available+${trans_amt} WHERE user_id = '${user_id}'`;
   let cash_query = db.query(cash_sql, (err, result) => {
-    if (err) {
-      throw err;
-    }
+    if (err) throw err;
   })
-  
+
   //Add amount to total account value/balance
   let sql = `UPDATE ${account_balance_table} SET account_balance = account_balance+${trans_amt} WHERE user_id = '${user_id}'`;
   let query = db.query(sql, (err, result) => {
-    if (err) {
-      throw err;
-    }
+    if (err) throw err;
   })
+})
+
+
+
+//Retrieves a users account balance from database
+app.get('/getBalance', (req,res) => {
+  let user_id = req.query.user_id;
+  console.log(user_id)
+  console.log("TEST")
+  let sql = `SELECT * FROM ${account_balance_table} WHERE user_id = '${user_id}'`;
+  let query = db.query(sql, (err, result) => {
+      if (err) throw err;
+
+      console.log(result);
+      let balance = result[0].account_balance;
+      console.log(`"The balance is: ${balance}"`);
+      
+      let string_balance = String(balance);
+      res.send({data:string_balance});
+      return;
+  })
+  
 })
 
 
@@ -186,6 +203,8 @@ app.get('/deposit', (req,res) => {
 app.listen(8080, (req, res) => { // Run a server
   console.log("SERVER IS RUNNING ON 8080");
 })
+
+
 
 // Server processing login attempt from client
 app.get('/loginattempt', (req, res, next) => {
