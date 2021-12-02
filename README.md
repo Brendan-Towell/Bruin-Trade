@@ -2,8 +2,8 @@
 To get the app working, first clone the repository from Github to your local environment.
 
 Under the repository directory(./Bruin-Trade), rename
-the directory "./Bruin-Trade/client/src/components/HomePage"
-to "./Bruin-Trade/client/src/components/homePage"
+the directory `"./Bruin-Trade/client/src/containers/HomePage"`
+to `"./Bruin-Trade/client/src/containers/homePage"`
 
 Open up the terminal, change the directory to client of the repository (./Bruin-Trade/client).
 To install the icons, use the command:
