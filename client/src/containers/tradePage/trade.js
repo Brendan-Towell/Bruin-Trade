@@ -1,6 +1,7 @@
 import React, { useState, Component } from "react";
 import styled from "styled-components";
 import { Marginer } from "../../components/marginer";
+import SearchBar from "../../components/searchBar";
 import WatchList from "../../components/watchList";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from "../../components/button";
@@ -124,16 +125,6 @@ const Sell = styled.div`
     display: flex;
 `;
 
-const SearchBar = styled.div`
-    width: 90%;
-    height: 2%;
-    padding: 10px; 
-    background-color: #FFFFFF;
-    display: flex;
-    justify-content: start;
-    flex-direction: row;
-`;
-
 const Form = styled.form`
     display: flex;
     flex-direction: row;
@@ -141,25 +132,25 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  width: 95%;
-  height: 25px;
-  outline: solid;
-  outline-width: thin;
-  outline-color: rgba(200, 200, 200, 0.3);
-  border: 1px solid rgba(200, 200, 200, 0.3);
-  padding: 0px 10px;
-  border-bottom: 1.4px solid transparent;
-  font-size: 12px;
-  &::placeholder {
-    color: rgba(200, 200, 200, 1);
-  }
-  &:not(:last-of-type) {
-    border-bottom: 1.5px solid rgba(200, 200, 200, 0.4);
-  }
-  &:focus {
-    outline: none;
-    border-bottom: 2px solid rgb(241, 196, 15);
-  }
+width: 95%;
+height: 25px;
+outline: solid;
+outline-width: thin;
+outline-color: rgba(200, 200, 200, 0.3);
+border: 1px solid rgba(200, 200, 200, 0.3);
+padding: 0px 10px;
+border-bottom: 1.4px solid transparent;
+font-size: 12px;
+&::placeholder {
+  color: rgba(200, 200, 200, 1);
+}
+&:not(:last-of-type) {
+  border-bottom: 1.5px solid rgba(200, 200, 200, 0.4);
+}
+&:focus {
+  outline: none;
+  border-bottom: 2px solid rgb(241, 196, 15);
+}
 `;
 
 const Header = styled.h3`
@@ -205,23 +196,13 @@ class Trade extends Component {
                 props.stockSymbol !== undefined
                     ? props.stockSymbol
                     : 'AMZN'
-
-
         }
+        this.updateStock = this.updateStock.bind(this);
     }
 
     updateStock(e) {
-        e.preventDefault();
-        const {symbol} = this.state;
-        const newSymbol = this.newSymbol.value;
-
-        console.log(newSymbol)
-
-        this.setState({
-            symbol: this.state.newSymbol
-        })   
-
-        console.log(this.state.symbol)
+        this.setState((state) => {return {symbol: e}});
+        console.log(this.state.symbol);
     }
 
     render() {
@@ -275,13 +256,7 @@ class Trade extends Component {
                     </GraphContainer>
                 </MainColumn>
                     <SideColumn>
-                        <SearchBar>
-                        <Form className="form-inline" onSubmit={(e) => {this.updateStock(e)}}>
-                            {search}
-                            <Marginer direction="horizontal" margin={10} />
-                            <Input ref={(input) => {this.newSymbol = input}} type="text" placeholder="Search" className="form-control" id="newItemInput"/>
-                        </Form>
-                        </SearchBar>
+                        <SearchBar updateStock = {this.updateStock}/>
                         <Marginer direction="vertical" margin={25} />
                         <Positions>
                             <PositionList/>
