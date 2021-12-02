@@ -92,7 +92,7 @@ class SearchBar extends Component {
                             this.updateStock(this.state.word)
                     }}}/>
                 </SearchBarContainer>
-                {this.state.result.length > 0 && (
+                {this.state.word.length > 0 && (
                     <Result>
                         {this.state.result.map((res) => {
                             return (
